@@ -1,17 +1,12 @@
-// Bootstrap badge colors mapped to each status value used by the backend.
-const statusClass = {
-  open: 'success',
-  closed: 'secondary',
-  active: 'success',
-  inactive: 'secondary',
-  Pending: 'warning',
-  Shortlisted: 'primary',
-  Rejected: 'danger',
-  Hired: 'success'
+const classes = {
+  completed: 'status-badge status-completed',
+  upcoming: 'status-badge status-upcoming',
+  pending: 'status-badge status-pending',
+  missed: 'status-badge status-missed',
+  active: 'badge text-bg-success',
+  inactive: 'badge text-bg-secondary'
 };
 
-const StatusBadge = ({ status }) => (
-  <span className={`badge text-bg-${statusClass[status] || 'secondary'}`}>{status}</span>
-);
+const StatusBadge = ({ status }) => <span className={classes[status] || 'badge text-bg-light'}>{status}</span>;
 
 export default StatusBadge;

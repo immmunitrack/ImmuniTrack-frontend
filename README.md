@@ -1,140 +1,126 @@
-# JobConnect Frontend
+# MamaCare Frontend
 
-This repository contains the React frontend for JobConnect, a learning project that shows students how to build a role-based job marketplace user interface with React, React Router, Axios, Bootstrap, and Vite.
+MamaCare Frontend is the React browser app for the MamaCare Immunisation Tracker. It helps caregivers register children, view vaccine timelines, mark received immunisations, and read reminders. Admins and health workers can review missed or upcoming visits, manage schedules, and view simple reports.
 
-The backend lives in a separate repository named `jobconnect-backend`.
+This folder is a separate frontend repo. Run it together with the `mamacare-backend` repo.
 
-## What This Frontend Teaches
+## Technologies
 
-- How React components are organized into pages, layouts, and reusable UI pieces.
-- How React Router creates public and protected routes.
-- How Axios calls a backend API and attaches a JWT automatically.
-- How React Context stores authentication state.
-- How role-based navigation changes for admin, employer, and job seeker users.
-- How forms send normal JSON and file uploads with `FormData`.
-- How Bootstrap can be combined with custom CSS for a responsive interface.
+- React for the user interface
+- React Router for pages and protected routes
+- Axios for API requests
+- Bootstrap plus custom CSS for responsive styling
+- Vite for the development server and production build
+- JWT stored in browser local storage for demo authentication
 
-## Folder Structure
+## Main Features
 
-```text
-jobconnect-frontend/
-  src/
-    components/            # Reusable UI components
-    context/               # AuthContext for login state
-    layouts/               # Shared dashboard layout
-    pages/                 # Route-level screens
-    services/              # Axios API client
-    utils/                 # Small shared helpers
-    App.jsx                # Route definitions
-    main.jsx               # React entry point
-    styles.css             # App-specific styling
-  index.html
-  vite.config.js
-  package.json
-  .env.example
-```
-
-## How The Frontend Works
-
-1. `main.jsx` renders the app and wraps it in `BrowserRouter` and `AuthProvider`.
-2. `AuthContext.jsx` restores the saved JWT and user from `localStorage`.
-3. `api.js` attaches the JWT to API requests with an Axios interceptor.
-4. `App.jsx` defines public routes and protected role-specific route groups.
-5. Pages load data from the backend and render forms, tables, cards, and dashboards.
+- Public MamaCare information pages
+- Login and registration screens
+- Caregiver dashboard with child profiles and immunisation timelines
+- Reminder list for upcoming and missed immunisation visits
+- Admin dashboard with child, schedule, facility, and report views
+- Responsive layout for laptops, tablets, and phones
 
 ## Requirements
 
 - Node.js 18 or newer
 - npm
-- Running JobConnect backend at `http://localhost:5000`
+- MamaCare Backend running at `http://localhost:5050/api`
 
 ## Setup
 
-Install dependencies:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-Create your environment file:
+2. Create your environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Default `.env` value:
+3. Confirm the API URL in `.env`:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5050/api
 ```
 
-Start the frontend:
+## Run The Frontend
 
 ```bash
 npm run dev
 ```
 
-The app runs at:
+Open the app at:
 
 ```text
 http://localhost:5173
 ```
 
-## Default Login Accounts
+## Run With The Backend
 
-The backend seed data provides these accounts:
-
-| Role | Email | Password |
-| --- | --- | --- |
-| Admin | `admin@jobconnect.com` | `password123` |
-| Employer | `employer1@jobconnect.com` | `password123` |
-| Employer | `employer2@jobconnect.com` | `password123` |
-| Job Seeker | `seeker1@jobconnect.com` | `password123` |
-| Job Seeker | `seeker2@jobconnect.com` | `password123` |
-
-## Main Screens
-
-Public:
-
-- Home
-- Browse Jobs
-- Job Details
-- Login
-- Register
-
-Job seeker:
-
-- Dashboard
-- Profile and CV upload
-- Apply for a job
-- My Applications
-
-Employer:
-
-- Dashboard
-- Company Profile
-- Post Job
-- My Jobs
-- View Applicants
-
-Admin:
-
-- Dashboard
-- Manage Users
-- Manage Jobs
-- Manage Applications
-
-## Student Exercises
-
-- Add client-side form validation messages for every required field.
-- Add pagination and sorting to job browsing.
-- Add a profile photo upload.
-- Add toast notifications instead of inline alert messages.
-- Add tests for protected route redirects.
-
-## Useful Checks
+Start the backend in a separate terminal:
 
 ```bash
-npm run build
-npm audit --omit=dev
+cd ../mamacare-backend
+npm install
+cp .env.example .env
+mysql -u root -p < database/schema.sql
+mysql -u root -p < database/seed.sql
+npm run dev
 ```
+
+Then start this frontend repo:
+
+```bash
+cd ../mamacare-frontend
+npm install
+cp .env.example .env
+npm run dev
+```
+
+## Demo Login Accounts
+
+- Admin or health worker: `admin@mamacare.test` / `Admin123!`
+- Caregiver: `amina@mamacare.test` / `Care123!`
+- Caregiver: `sarah@mamacare.test` / `Care123!`
+- Caregiver: `prossy@mamacare.test` / `Care123!`
+
+## Project Structure
+
+```text
+src/assets/       Images used by the app
+src/context/      Authentication state provider
+src/pages/        Page components and dashboard views
+src/services/     Axios API client and helpers
+src/App.jsx       Route definitions
+src/main.jsx      React entry point
+src/styles.css    Application styles
+```
+
+## Useful Scripts
+
+```bash
+npm run dev      # Start Vite development server
+npm run build    # Create production build in dist/
+npm run preview  # Preview the production build locally
+```
+
+## How The App Talks To The API
+
+The Axios client in `src/services/api.js` reads `VITE_API_URL` from `.env`. During local development it should point to:
+
+```text
+http://localhost:5050/api
+```
+
+After login, the app stores the JWT token and sends it in the `Authorization` header for protected API calls.
+
+## Learning Notes
+
+Start with `src/App.jsx` to understand the page routes. Then read `src/pages/MamaCarePages.jsx` for the main screens and `src/context/AuthContext.jsx` for login state. API calls are grouped in `src/services/api.js`.
+
+MamaCare is a learning project and reminder tool. It does not replace advice from a qualified health worker.

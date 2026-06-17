@@ -1,16 +1,17 @@
 :root {
-  /* Shared design tokens keep colors consistent across the app. */
-  --jc-primary: #2557d6;
-  --jc-ink: #172033;
-  --jc-muted: #667085;
-  --jc-surface: #f5f7fb;
-  --jc-border: #d9e0ea;
+  --mc-primary: #116a73;
+  --mc-primary-dark: #0a454b;
+  --mc-accent: #f4a261;
+  --mc-ink: #17252a;
+  --mc-muted: #64748b;
+  --mc-surface: #f6faf9;
+  --mc-card: #ffffff;
+  --mc-border: #d8e5e2;
 }
 
 body {
-  /* Bootstrap handles most component styling; these rules set the product look. */
-  background: var(--jc-surface);
-  color: var(--jc-ink);
+  background: var(--mc-surface);
+  color: var(--mc-ink);
 }
 
 a {
@@ -18,90 +19,101 @@ a {
 }
 
 .btn-primary {
-  background: var(--jc-primary);
-  border-color: var(--jc-primary);
+  background: var(--mc-primary);
+  border-color: var(--mc-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: var(--mc-primary-dark);
+  border-color: var(--mc-primary-dark);
 }
 
 .text-primary {
-  color: var(--jc-primary) !important;
+  color: var(--mc-primary) !important;
+}
+
+.navbar-brand {
+  letter-spacing: 0;
 }
 
 .hero-section {
-  /* The home hero uses a restrained background so job information stays readable. */
-  background:
-    linear-gradient(120deg, rgba(37, 87, 214, 0.12), rgba(20, 184, 166, 0.10)),
-    #ffffff;
-  border-bottom: 1px solid var(--jc-border);
-}
-
-.hero-panel {
-  /* Dark panel creates contrast for the quick metric summary. */
-  background: #0f172a;
-  color: #ffffff;
-  border-radius: 8px;
-  padding: 1.25rem;
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
-}
-
-.metric-row {
+  min-height: 74vh;
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  background: #102f34;
 }
 
-.metric-row:last-child {
-  border-bottom: 0;
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
-.metric-row strong {
-  font-size: 1.5rem;
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 45, 50, 0.88) 0%, rgba(10, 45, 50, 0.64) 42%, rgba(10, 45, 50, 0.12) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  padding-block: 4rem;
+}
+
+.hero-content > div {
+  max-width: 660px;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  line-height: 1.04;
+  margin: 0.6rem 0 1rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.eyebrow {
+  color: #ffd8a8;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
 .auth-page {
-  /* Centers login/register forms vertically and horizontally. */
   min-height: calc(100vh - 57px);
   display: grid;
   place-items: center;
   padding: 2rem 1rem;
 }
 
+.auth-card,
+.app-card {
+  background: var(--mc-card);
+  border: 1px solid var(--mc-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 16px 40px rgba(17, 106, 115, 0.08);
+}
+
 .auth-card {
-  width: min(100%, 440px);
-  background: #ffffff;
-  border: 1px solid var(--jc-border);
-  border-radius: 8px;
-  padding: 1.5rem;
+  width: min(100%, 460px);
 }
 
-.filter-bar {
-  /* CSS grid keeps the search controls aligned on desktop. */
-  display: grid;
-  grid-template-columns: 2fr 1fr 180px auto;
-  gap: 0.75rem;
-  background: #ffffff;
-  border: 1px solid var(--jc-border);
-  border-radius: 8px;
-  padding: 1rem;
-}
-
-.job-card,
-.form-card,
-.card {
-  border-color: var(--jc-border);
-  border-radius: 8px;
-}
-
-.job-detail-header {
-  /* Header groups the job title and apply action without needing another component. */
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  background: #ffffff;
-  border: 1px solid var(--jc-border);
-  border-radius: 8px;
-  padding: 1.5rem;
+.auth-card h1,
+.page-header h1 {
+  font-size: 1.7rem;
+  margin-bottom: 1rem;
 }
 
 .dashboard-shell {
@@ -109,27 +121,49 @@ a {
 }
 
 .dashboard-nav {
-  /* Sidebar stays visible while scrolling longer dashboard tables. */
   position: sticky;
-  top: 80px;
+  top: 78px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .dashboard-nav .active {
-  background: var(--jc-primary);
-  border-color: var(--jc-primary);
+  background: var(--mc-primary);
+  border-color: var(--mc-primary);
+  color: #fff;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--mc-muted);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
 }
 
 .stat-card {
-  /* Reusable dashboard metric card. */
-  background: #ffffff;
-  border: 1px solid var(--jc-border);
+  background: #fff;
+  border: 1px solid var(--mc-border);
   border-radius: 8px;
   padding: 1rem;
 }
 
 .stat-card span {
   display: block;
-  color: var(--jc-muted);
+  color: var(--mc-muted);
+  font-size: 0.88rem;
   text-transform: capitalize;
 }
 
@@ -137,38 +171,152 @@ a {
   display: block;
   font-size: 2rem;
   line-height: 1.2;
+  color: var(--mc-primary-dark);
 }
 
-.preline {
-  /* Preserve line breaks from textarea/database text. */
-  white-space: pre-line;
+.filter-bar {
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-radius: 8px;
+  padding: 0.9rem;
 }
 
-.table-text {
-  /* Long skill lists are truncated so tables remain scannable. */
-  max-width: 260px;
+.child-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.child-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.2rem;
+}
+
+.child-card p {
+  color: var(--mc-muted);
+}
+
+.date-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #b9d7e6;
+  background: #eef8fd;
+  color: #075985;
+  border-radius: 8px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.88rem;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-completed {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-upcoming {
+  color: #075985;
+  background: #e0f2fe;
+}
+
+.status-pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.status-missed {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.detail-grid span {
+  display: block;
+  color: var(--mc-muted);
+  font-size: 0.88rem;
+}
+
+.detail-grid strong {
+  display: block;
+}
+
+.v-stack {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.reminder-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.reminder-row p {
+  margin: 0.5rem 0;
+}
+
+.reminder-row span {
+  color: var(--mc-muted);
+  font-size: 0.88rem;
+}
+
+.loading-state {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: var(--mc-muted);
+}
+
+.narrow-page {
+  max-width: 820px;
+}
+
+.table {
+  --bs-table-bg: transparent;
 }
 
 @media (max-width: 768px) {
-  /* Stack dense layouts on small screens for mobile usability. */
-  .filter-bar,
-  .job-detail-header {
+  .hero-section {
+    min-height: 68vh;
+  }
+
+  .hero-overlay {
+    background: rgba(10, 45, 50, 0.76);
+  }
+
+  .page-header,
+  .child-card,
+  .reminder-row {
     display: block;
   }
 
-  .filter-bar > * {
-    margin-bottom: 0.75rem;
+  .page-header .btn,
+  .child-card .btn,
+  .reminder-row .btn {
+    margin-top: 0.75rem;
   }
 
-  .filter-bar > *:last-child {
-    margin-bottom: 0;
-    width: 100%;
-  }
-
-  .job-detail-header > * + * {
-    margin-top: 1rem;
+  .table {
+    min-width: 760px;
   }
 }

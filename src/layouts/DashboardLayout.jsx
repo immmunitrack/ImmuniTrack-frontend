@@ -1,32 +1,28 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-// Each role gets a different sidebar menu.
-const navItems = {
-  job_seeker: [
-    ['Overview', '/job-seeker'],
-    ['Profile', '/job-seeker/profile'],
-    ['Applications', '/job-seeker/applications'],
-    ['Browse Jobs', '/jobs']
-  ],
-  employer: [
-    ['Overview', '/employer'],
-    ['Company Profile', '/employer/profile'],
-    ['Post Job', '/employer/jobs/new'],
-    ['My Jobs', '/employer/jobs']
-  ],
-  admin: [
-    ['Overview', '/admin'],
-    ['Users', '/admin/users'],
-    ['Jobs', '/admin/jobs'],
-    ['Applications', '/admin/applications']
-  ]
-};
+const caregiverLinks = [
+  ['/caregiver', 'Dashboard'],
+  ['/caregiver/children', 'My Children'],
+  ['/caregiver/upcoming', 'Upcoming'],
+  ['/caregiver/missed', 'Missed'],
+  ['/caregiver/reminders', 'Reminders'],
+  ['/caregiver/profile', 'Profile']
+];
+
+const adminLinks = [
+  ['/admin', 'Dashboard'],
+  ['/admin/users', 'Caregivers'],
+  ['/admin/children', 'Children'],
+  ['/admin/schedule', 'Schedule'],
+  ['/admin/due-this-week', 'Due This Week'],
+  ['/admin/missed-cases', 'Missed Cases'],
+  ['/admin/reports', 'Reports']
+];
 
 const DashboardLayout = () => {
   const { user } = useAuth();
-  // ProtectedRoute guarantees a user exists before this layout renders.
-  const items = navItems[user.role] || [];
+  const links = user?.role === 'caregiver' ? caregiverLinks : adminLinks;
 
   return (
     <main className="dashboard-shell">
@@ -34,9 +30,8 @@ const DashboardLayout = () => {
         <div className="row g-4">
           <aside className="col-lg-3">
             <div className="list-group dashboard-nav">
-              {items.map(([label, to]) => (
-                // NavLink automatically adds an active class when the URL matches.
-                <NavLink key={to} className="list-group-item list-group-item-action" to={to} end>
+              {links.map(([to, label]) => (
+                <NavLink key={to} end className="list-group-item list-group-item-action" to={to}>
                   {label}
                 </NavLink>
               ))}

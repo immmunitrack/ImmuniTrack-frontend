@@ -1,8 +1,7 @@
-// Shared loading indicator used while API requests are in progress.
-const Loading = ({ label = 'Loading...' }) => (
-  <div className="py-5 text-center text-secondary">
-    <div className="spinner-border spinner-border-sm me-2" role="status" />
-    {label}
+const Loading = ({ label = 'Loading' }) => (
+  <div className="loading-state">
+    <div className="spinner-border text-primary" role="status" aria-hidden="true" />
+    <span>{label}</span>
   </div>
 );
 

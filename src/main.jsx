@@ -11,9 +11,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 // React renders App into the <div id="root"> from index.html.
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* BrowserRouter enables URL-based navigation without full page reloads. */}
-    <BrowserRouter>
-      {/* AuthProvider stores the logged-in user and exposes login/register/logout helpers. */}
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <App />
       </AuthProvider>
