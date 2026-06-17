@@ -82,19 +82,15 @@ http://localhost:5173
 
 ## Default Login Accounts
 
-The backend seed data provides these accounts. All use:
+The backend seed data provides these accounts:
 
-```text
-password123
-```
-
-| Role | Email |
-| --- | --- |
-| Admin | admin@jobconnect.com |
-| Employer | employer1@jobconnect.com |
-| Employer | employer2@jobconnect.com |
-| Job Seeker | seeker1@jobconnect.com |
-| Job Seeker | seeker2@jobconnect.com |
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@jobconnect.com` | `password123` |
+| Employer | `employer1@jobconnect.com` | `password123` |
+| Employer | `employer2@jobconnect.com` | `password123` |
+| Job Seeker | `seeker1@jobconnect.com` | `password123` |
+| Job Seeker | `seeker2@jobconnect.com` | `password123` |
 
 ## Main Screens
 
