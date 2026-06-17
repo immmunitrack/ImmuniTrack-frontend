@@ -16,6 +16,7 @@ const Register = () => {
     setError('');
     setLoading(true);
     try {
+      // The backend creates the user, hashes the password, and returns a JWT.
       const user = await register(form);
       navigate(dashboardFor(user.role));
     } catch (err) {

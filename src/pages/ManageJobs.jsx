@@ -11,6 +11,7 @@ const ManageJobs = () => {
   const [error, setError] = useState('');
 
   const loadJobs = () => {
+    // Admins can see open and closed jobs for moderation.
     setLoading(true);
     api
       .get('/admin/jobs')
@@ -24,6 +25,7 @@ const ManageJobs = () => {
   }, []);
 
   const removeJob = async (id) => {
+    // Removing inappropriate posts uses the shared DELETE /api/jobs/:id endpoint.
     if (!window.confirm('Remove this job post?')) return;
     setMessage('');
     setError('');

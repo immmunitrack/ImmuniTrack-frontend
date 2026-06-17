@@ -8,6 +8,7 @@ const MyApplications = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // The backend filters by req.user.id, so users cannot see other seekers' applications.
     api
       .get('/applications/my-applications')
       .then((res) => setApplications(res.data.applications))

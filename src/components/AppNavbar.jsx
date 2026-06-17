@@ -7,6 +7,7 @@ const AppNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Clear the auth context and send the user back to the public home page.
     logout();
     navigate('/');
   };
@@ -36,6 +37,7 @@ const AppNavbar = () => {
               </NavLink>
             </li>
             {user && (
+              // The dashboard link changes based on the logged-in user's role.
               <li className="nav-item">
                 <NavLink className="nav-link" to={dashboardFor(user.role)}>
                   Dashboard
@@ -45,6 +47,7 @@ const AppNavbar = () => {
           </ul>
           <div className="d-flex gap-2 align-items-center">
             {user ? (
+              // Logged-in users see identity and logout controls.
               <>
                 <span className="small text-secondary d-none d-md-inline">
                   {user.name} · {roleLabel(user.role)}
@@ -54,6 +57,7 @@ const AppNavbar = () => {
                 </button>
               </>
             ) : (
+              // Visitors see login and registration actions.
               <>
                 <Link className="btn btn-outline-primary btn-sm" to="/login">
                   Login

@@ -9,6 +9,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Load a few open jobs for the landing page preview.
     api
       .get('/jobs')
       .then((res) => setJobs(res.data.jobs.slice(0, 3)))
@@ -17,6 +18,7 @@ const Home = () => {
 
   return (
     <main>
+      {/* Public landing section. It links users directly to the main workflows. */}
       <section className="hero-section">
         <div className="container py-5">
           <div className="row align-items-center g-5">
@@ -55,6 +57,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* Recent jobs reuse the same JobCard component used by the browse page. */}
       <section className="container py-5">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2 className="h4 mb-0">Recent Openings</h2>

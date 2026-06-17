@@ -12,6 +12,7 @@ const ManageUsers = () => {
   const [error, setError] = useState('');
 
   const loadUsers = () => {
+    // Admin endpoint returns public user fields without password hashes.
     setLoading(true);
     api
       .get('/admin/users')
@@ -25,6 +26,7 @@ const ManageUsers = () => {
   }, []);
 
   const updateStatus = async (id, status) => {
+    // Toggle between active and inactive. The backend prevents self-deactivation.
     setMessage('');
     setError('');
     try {

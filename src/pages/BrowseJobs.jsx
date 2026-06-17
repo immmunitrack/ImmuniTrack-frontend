@@ -11,6 +11,7 @@ const BrowseJobs = () => {
   const [error, setError] = useState('');
 
   const loadJobs = async () => {
+    // Query params are sent to the backend so filtering happens in SQL.
     setLoading(true);
     setError('');
     try {
@@ -28,6 +29,7 @@ const BrowseJobs = () => {
   }, []);
 
   const handleSubmit = (event) => {
+    // Prevent the browser from reloading the page when the search form is submitted.
     event.preventDefault();
     loadJobs();
   };

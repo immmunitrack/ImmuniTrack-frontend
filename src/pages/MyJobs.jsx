@@ -12,6 +12,7 @@ const MyJobs = () => {
   const [error, setError] = useState('');
 
   const loadJobs = () => {
+    // Fetch jobs owned by the logged-in employer.
     setLoading(true);
     api
       .get('/jobs/employer/my-jobs')
@@ -25,6 +26,7 @@ const MyJobs = () => {
   }, []);
 
   const deleteJob = async (id) => {
+    // Browser confirmation prevents accidental deletion.
     if (!window.confirm('Delete this job post?')) return;
     setMessage('');
     setError('');

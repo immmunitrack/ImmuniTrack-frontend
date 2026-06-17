@@ -9,12 +9,14 @@ const JobSeekerDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Dashboard stats are calculated from the user's own applications.
     api
       .get('/applications/my-applications')
       .then((res) => setApplications(res.data.applications))
       .finally(() => setLoading(false));
   }, []);
 
+  // Count applications by status for the summary cards.
   const counts = applications.reduce((acc, app) => {
     acc[app.status] = (acc[app.status] || 0) + 1;
     return acc;

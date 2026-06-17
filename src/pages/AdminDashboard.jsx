@@ -7,6 +7,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Stats come from count queries on the backend.
     api
       .get('/admin/stats')
       .then((res) => setStats(res.data.stats))

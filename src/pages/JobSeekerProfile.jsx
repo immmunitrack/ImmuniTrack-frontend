@@ -18,6 +18,7 @@ const JobSeekerProfile = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Load the current profile so the form can be used for both create and update.
     api
       .get('/profile')
       .then((res) => {
@@ -39,6 +40,7 @@ const JobSeekerProfile = () => {
     event.preventDefault();
     setMessage('');
     setError('');
+    // FormData is required when sending a file upload with Axios.
     const data = new FormData();
     Object.entries(form).forEach(([key, value]) => data.append(key, value));
     if (cv) data.append('cv', cv);

@@ -13,6 +13,7 @@ const ViewApplicants = () => {
   const [error, setError] = useState('');
 
   const loadApplications = () => {
+    // The backend checks that this employer owns the job.
     setLoading(true);
     api
       .get(`/applications/job/${id}`)
@@ -26,6 +27,7 @@ const ViewApplicants = () => {
   }, [id]);
 
   const updateStatus = async (applicationId, status) => {
+    // Employers update candidates through the controlled status list.
     setMessage('');
     setError('');
     try {

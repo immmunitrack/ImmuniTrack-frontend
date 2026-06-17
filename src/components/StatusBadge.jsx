@@ -1,3 +1,4 @@
+// Bootstrap badge colors mapped to each status value used by the backend.
 const statusClass = {
   open: 'success',
   closed: 'secondary',

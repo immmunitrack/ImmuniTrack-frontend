@@ -1,4 +1,5 @@
 :root {
+  /* Shared design tokens keep colors consistent across the app. */
   --jc-primary: #2557d6;
   --jc-ink: #172033;
   --jc-muted: #667085;
@@ -7,6 +8,7 @@
 }
 
 body {
+  /* Bootstrap handles most component styling; these rules set the product look. */
   background: var(--jc-surface);
   color: var(--jc-ink);
 }
@@ -25,6 +27,7 @@ a {
 }
 
 .hero-section {
+  /* The home hero uses a restrained background so job information stays readable. */
   background:
     linear-gradient(120deg, rgba(37, 87, 214, 0.12), rgba(20, 184, 166, 0.10)),
     #ffffff;
@@ -32,6 +35,7 @@ a {
 }
 
 .hero-panel {
+  /* Dark panel creates contrast for the quick metric summary. */
   background: #0f172a;
   color: #ffffff;
   border-radius: 8px;
@@ -56,6 +60,7 @@ a {
 }
 
 .auth-page {
+  /* Centers login/register forms vertically and horizontally. */
   min-height: calc(100vh - 57px);
   display: grid;
   place-items: center;
@@ -71,6 +76,7 @@ a {
 }
 
 .filter-bar {
+  /* CSS grid keeps the search controls aligned on desktop. */
   display: grid;
   grid-template-columns: 2fr 1fr 180px auto;
   gap: 0.75rem;
@@ -88,6 +94,7 @@ a {
 }
 
 .job-detail-header {
+  /* Header groups the job title and apply action without needing another component. */
   display: flex;
   justify-content: space-between;
   gap: 1.5rem;
@@ -102,6 +109,7 @@ a {
 }
 
 .dashboard-nav {
+  /* Sidebar stays visible while scrolling longer dashboard tables. */
   position: sticky;
   top: 80px;
 }
@@ -112,6 +120,7 @@ a {
 }
 
 .stat-card {
+  /* Reusable dashboard metric card. */
   background: #ffffff;
   border: 1px solid var(--jc-border);
   border-radius: 8px;
@@ -131,10 +140,12 @@ a {
 }
 
 .preline {
+  /* Preserve line breaks from textarea/database text. */
   white-space: pre-line;
 }
 
 .table-text {
+  /* Long skill lists are truncated so tables remain scannable. */
   max-width: 260px;
   white-space: nowrap;
   overflow: hidden;
@@ -142,6 +153,7 @@ a {
 }
 
 @media (max-width: 768px) {
+  /* Stack dense layouts on small screens for mobile usability. */
   .filter-bar,
   .job-detail-header {
     display: block;

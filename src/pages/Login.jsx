@@ -17,7 +17,9 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
+      // AuthContext stores the token/user and returns the logged-in user.
       const user = await login(form.email, form.password);
+      // If the user was redirected here from a protected page, send them back there.
       navigate(location.state?.from?.pathname || dashboardFor(user.role));
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');

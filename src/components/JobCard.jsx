@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import StatusBadge from './StatusBadge';
 
+// Reusable card for public job browsing and employer job management.
+// The optional actions prop lets pages add edit/delete/applicant buttons.
 const JobCard = ({ job, actions }) => (
   <div className="card job-card h-100">
     <div className="card-body d-flex flex-column">

@@ -8,6 +8,7 @@ const ManageApplications = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Admins can view all applications across jobs and companies.
     api
       .get('/admin/applications')
       .then((res) => setApplications(res.data.applications))

@@ -8,12 +8,14 @@ const EmployerDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Employers see only their own jobs because the backend uses req.user.id.
     api
       .get('/jobs/employer/my-jobs')
       .then((res) => setJobs(res.data.jobs))
       .finally(() => setLoading(false));
   }, []);
 
+  // Count open postings for the summary card.
   const open = jobs.filter((job) => job.status === 'open').length;
 
   return (

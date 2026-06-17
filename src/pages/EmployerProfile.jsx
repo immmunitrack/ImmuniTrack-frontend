@@ -17,6 +17,7 @@ const EmployerProfile = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Load existing company data so the form can edit it.
     api
       .get('/profile')
       .then((res) => {
@@ -39,6 +40,7 @@ const EmployerProfile = () => {
     setMessage('');
     setError('');
     try {
+      // PUT performs an upsert on the backend: create if missing, update if present.
       await api.put('/profile/employer', form);
       setMessage('Company profile saved successfully');
     } catch (err) {

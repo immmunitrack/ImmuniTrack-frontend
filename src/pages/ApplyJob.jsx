@@ -15,6 +15,7 @@ const ApplyJob = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Show the job summary above the application form.
     api
       .get(`/jobs/${id}`)
       .then((res) => setJob(res.data.job))
@@ -26,6 +27,7 @@ const ApplyJob = () => {
     event.preventDefault();
     setError('');
     setSubmitting(true);
+    // FormData lets the seeker include a CV override for this application.
     const data = new FormData();
     data.append('cover_letter', coverLetter);
     if (cv) data.append('cv', cv);

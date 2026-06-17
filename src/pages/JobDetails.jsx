@@ -14,6 +14,7 @@ const JobDetails = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Load one job based on the :id route parameter.
     api
       .get(`/jobs/${id}`)
       .then((res) => setJob(res.data.job))
@@ -25,6 +26,7 @@ const JobDetails = () => {
   if (error) return <main className="container py-4"><AlertMessage message={error} /></main>;
   if (!job) return null;
 
+  // Only job seekers are allowed to apply. Other roles can view the public details.
   return (
     <main className="container py-4">
       <div className="job-detail-header mb-4">

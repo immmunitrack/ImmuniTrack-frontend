@@ -22,16 +22,20 @@ import ManageJobs from './pages/ManageJobs';
 import ManageApplications from './pages/ManageApplications';
 import NotFound from './pages/NotFound';
 
+// App declares every route in the frontend.
+// Public routes are listed first; protected route groups are wrapped by role checks.
 const App = () => (
   <>
     <AppNavbar />
     <Routes>
+      {/* Public pages available to visitors and logged-in users. */}
       <Route path="/" element={<Home />} />
       <Route path="/jobs" element={<BrowseJobs />} />
       <Route path="/jobs/:id" element={<JobDetails />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
+      {/* Job seeker routes. ProtectedRoute blocks unauthenticated users and wrong roles. */}
       <Route element={<ProtectedRoute roles={['job_seeker']} />}>
         <Route path="/jobs/:id/apply" element={<ApplyJob />} />
         <Route element={<DashboardLayout />}>
@@ -41,6 +45,7 @@ const App = () => (
         </Route>
       </Route>
 
+      {/* Employer-only dashboard and job management routes. */}
       <Route element={<ProtectedRoute roles={['employer']} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/employer" element={<EmployerDashboard />} />
@@ -52,6 +57,7 @@ const App = () => (
         </Route>
       </Route>
 
+      {/* Admin-only management routes. */}
       <Route element={<ProtectedRoute roles={['admin']} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<AdminDashboard />} />
@@ -61,6 +67,7 @@ const App = () => (
         </Route>
       </Route>
 
+      {/* Fallback route for unknown URLs. */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   </>

@@ -5,6 +5,7 @@ import AlertMessage from '../components/AlertMessage';
 import Loading from '../components/Loading';
 
 const blank = {
+  // Defaults used when creating a new job.
   title: '',
   description: '',
   requirements: '',
@@ -26,6 +27,7 @@ const JobForm = ({ mode = 'create' }) => {
 
   useEffect(() => {
     if (mode !== 'edit') return;
+    // In edit mode, load the current job and prefill the form.
     api
       .get(`/jobs/${id}`)
       .then((res) => {
@@ -50,6 +52,7 @@ const JobForm = ({ mode = 'create' }) => {
     setError('');
     setSaving(true);
     try {
+      // Same component handles both create and edit; mode chooses the endpoint.
       if (mode === 'edit') {
         await api.put(`/jobs/${id}`, form);
       } else {

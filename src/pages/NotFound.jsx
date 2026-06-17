@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+// Simple fallback for unknown routes.
 const NotFound = () => (
   <main className="container py-5 text-center">
     <h1 className="h3">Page not found</h1>
