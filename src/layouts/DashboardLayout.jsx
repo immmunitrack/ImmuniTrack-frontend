@@ -19,7 +19,8 @@ const adminLinks = [
   ['/admin/schedule', 'Schedule'],
   ['/admin/due-this-week', 'Due This Week'],
   ['/admin/missed-cases', 'Missed Cases'],
-  ['/admin/reports', 'Reports']
+  ['/admin/reports', 'Reports'],
+  ['/admin/vaccine-stock', 'Vaccine Stock']
 ];
 
 const DashboardLayout = () => {

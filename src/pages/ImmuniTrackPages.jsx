@@ -977,6 +977,9 @@ export const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   useEffect(() => { api.get('/admin/stats').then((res) => setStats(res.data.stats)); }, []);
   if (!stats) return <Loading />;
+
+  const complianceRate = Math.round((stats.fully_immunised / Math.max(stats.total_children, 1)) * 100);
+
   return (
     <>
       <PageHeader title="Health Worker Dashboard" subtitle="Monitor children due for vaccines and missed visits." />
@@ -987,6 +990,72 @@ export const AdminDashboard = () => {
         { label: 'upcoming this week', value: stats.upcoming_this_week },
         { label: 'completed this month', value: stats.completed_this_month }
       ]} />
+
+      <div className="row g-4 mt-2">
+        {/* Compliance Progress Visual */}
+        <div className="col-lg-6">
+          <div className="card border-0 shadow-sm rounded-4 p-4 h-100" style={{ background: 'var(--immuni-white, #ffffff)' }}>
+            <h4 className="h5 font-weight-medium text-dark mb-3">Clinic Compliance Rate</h4>
+            <div className="d-flex align-items-center gap-4 py-3">
+              <div className="position-relative d-flex align-items-center justify-content-center" style={{ width: '100px', height: '100px' }}>
+                <svg width="100" height="100" viewBox="0 0 36 36">
+                  <path stroke="rgba(0, 95, 96, 0.08)" strokeWidth="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path stroke="#005f60" strokeDasharray={`${complianceRate}, 100`} strokeWidth="3.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style={{ transition: 'stroke-dasharray 0.5s ease-in-out' }} />
+                </svg>
+                <strong className="position-absolute text-primary" style={{ fontSize: '1.4rem' }}>{complianceRate}%</strong>
+              </div>
+              <div>
+                <p className="m-0 text-muted small">This rate indicates the proportion of registered children who are fully immunised according to their growth milestones.</p>
+                <div className="d-flex align-items-center gap-2 mt-3">
+                  <span className="badge bg-success-subtle text-success px-2.5 py-1.5 font-weight-medium rounded-pill" style={{ fontSize: '0.75rem' }}>
+                    {stats.fully_immunised} Fully Protected
+                  </span>
+                  <span className="text-muted small">out of {stats.total_children} total children</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Operational Indicators Breakdown Visual */}
+        <div className="col-lg-6">
+          <div className="card border-0 shadow-sm rounded-4 p-4 h-100" style={{ background: 'var(--immuni-white, #ffffff)' }}>
+            <h4 className="h5 font-weight-medium text-dark mb-3">Weekly Operational Indicators</h4>
+            
+            <div className="d-flex flex-column gap-3">
+              <div>
+                <div className="d-flex justify-content-between align-items-center mb-1">
+                  <span className="small text-muted font-weight-medium">Overdue Doses Impact</span>
+                  <span className="small font-weight-medium text-danger">{stats.missed_vaccines} overdue</span>
+                </div>
+                <div className="progress rounded-pill" style={{ height: '8px', background: 'rgba(0,0,0,0.05)' }}>
+                  <div className="progress-bar bg-danger" style={{ width: `${Math.min((stats.missed_vaccines / Math.max(stats.total_children, 1)) * 100, 100)}%` }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="d-flex justify-content-between align-items-center mb-1">
+                  <span className="small text-muted font-weight-medium">Upcoming Doses This Week</span>
+                  <span className="small font-weight-medium text-warning">{stats.upcoming_this_week} scheduled</span>
+                </div>
+                <div className="progress rounded-pill" style={{ height: '8px', background: 'rgba(0,0,0,0.05)' }}>
+                  <div className="progress-bar bg-warning" style={{ width: `${Math.min((stats.upcoming_this_week / Math.max(stats.total_children, 1)) * 100, 100)}%` }}></div>
+                </div>
+              </div>
+
+              <div>
+                <div className="d-flex justify-content-between align-items-center mb-1">
+                  <span className="small text-muted font-weight-medium">Completed Doses This Month</span>
+                  <span className="small font-weight-medium text-success">{stats.completed_this_month} success</span>
+                </div>
+                <div className="progress rounded-pill" style={{ height: '8px', background: 'rgba(0,0,0,0.05)' }}>
+                  <div className="progress-bar bg-success" style={{ width: `${Math.min((stats.completed_this_month / Math.max(stats.total_children, 1)) * 100, 100)}%` }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
@@ -1376,6 +1445,252 @@ export const Reports = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export const VaccineStock = () => {
+  const [stockList, setStockList] = useState(() => {
+    const saved = localStorage.getItem('immunitrack_vaccine_stock');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, name: 'BCG (Tuberculosis)', batch: 'BCG-2026-982', doses: 120, expiryDate: '2026-12-15', temperature: '4.2°C' },
+      { id: 2, name: 'OPV (Oral Polio Vaccine)', batch: 'OPV-881-A', doses: 15, expiryDate: '2026-09-01', temperature: '5.0°C' },
+      { id: 3, name: 'Rotavirus (Rotarix)', batch: 'ROTA-774-B', doses: 85, expiryDate: '2027-02-10', temperature: '3.8°C' },
+      { id: 4, name: 'Pentavalent (DPT-HepB-Hib)', batch: 'PENTA-402-C', doses: 8, expiryDate: '2026-08-20', temperature: '4.5°C' },
+      { id: 5, name: 'PCV (Pneumococcal Conjugate)', batch: 'PCV-109-Y', doses: 240, expiryDate: '2026-11-30', temperature: '4.0°C' },
+      { id: 6, name: 'Measles-Rubella (MR)', batch: 'MR-305-D', doses: 45, expiryDate: '2026-10-15', temperature: '3.6°C' }
+    ];
+  });
+
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ name: '', batch: '', quantity: '', expiryDate: '', temperature: '' });
+
+  useEffect(() => {
+    localStorage.setItem('immunitrack_vaccine_stock', JSON.stringify(stockList));
+  }, [stockList]);
+
+  // Compute metrics
+  const totalDoses = stockList.reduce((sum, item) => sum + Number(item.doses), 0);
+  
+  const LOW_STOCK_THRESHOLD = 50;
+  const lowStockCount = stockList.filter(item => item.doses < LOW_STOCK_THRESHOLD).length;
+
+  const expiringBatchesCount = stockList.filter(item => {
+    const expiry = new Date(item.expiryDate);
+    const today = new Date();
+    const diffTime = expiry - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 && diffDays <= 90;
+  }).length;
+
+  const handleUpdateStock = (e) => {
+    e.preventDefault();
+    if (!form.name || !form.batch || !form.quantity) {
+      alert('Please fill out all required fields');
+      return;
+    }
+
+    const qty = Number(form.quantity);
+    if (isNaN(qty) || qty <= 0) {
+      alert('Quantity must be a positive number');
+      return;
+    }
+
+    setStockList(prev => {
+      const existingIdx = prev.findIndex(item => item.batch.toLowerCase() === form.batch.toLowerCase());
+      if (existingIdx > -1) {
+        const updated = [...prev];
+        updated[existingIdx] = {
+          ...updated[existingIdx],
+          doses: updated[existingIdx].doses + qty,
+          expiryDate: form.expiryDate || updated[existingIdx].expiryDate,
+          temperature: form.temperature || updated[existingIdx].temperature
+        };
+        return updated;
+      } else {
+        return [
+          ...prev,
+          {
+            id: Date.now(),
+            name: form.name,
+            batch: form.batch,
+            doses: qty,
+            expiryDate: form.expiryDate || new Date(Date.now() + 365*24*60*60*1000).toISOString().split('T')[0],
+            temperature: form.temperature || '4.0°C'
+          }
+        ];
+      }
+    });
+
+    setForm({ name: '', batch: '', quantity: '', expiryDate: '', temperature: '' });
+    setShowModal(false);
+  };
+
+  return (
+    <>
+      <PageHeader 
+        title="Vaccine Inventory & Stock" 
+        subtitle="Real-time cold-chain status monitoring and dose levels tracking." 
+        action={
+          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Update Stock
+          </button>
+        }
+      />
+
+      {/* Metrics Row */}
+      <div className="row g-3">
+        <div className="col-md-4">
+          <div className="app-card text-center p-3 border-0 shadow-sm rounded-4 position-relative overflow-hidden h-100" style={{ background: 'var(--immuni-white, #ffffff)' }}>
+            <div className="text-uppercase small text-muted font-weight-medium" style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}>Total Active Doses</div>
+            <div className="display-6 font-weight-medium mt-2 text-primary">{totalDoses}</div>
+            <small className="text-muted d-block mt-1">Vials in cold storage</small>
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="app-card text-center p-3 border-0 shadow-sm rounded-4 position-relative overflow-hidden h-100" style={{ background: 'var(--immuni-white, #ffffff)' }}>
+            <div className="text-uppercase small text-muted font-weight-medium" style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}>Low Stock Warning</div>
+            <div className="display-6 font-weight-medium mt-2 text-danger">{lowStockCount}</div>
+            <small className="text-danger d-block mt-1">Below {LOW_STOCK_THRESHOLD} doses limit</small>
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="app-card text-center p-3 border-0 shadow-sm rounded-4 position-relative overflow-hidden h-100" style={{ background: 'var(--immuni-white, #ffffff)' }}>
+            <div className="text-uppercase small text-muted font-weight-medium" style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}>Expiring Batches</div>
+            <div className="display-6 font-weight-medium mt-2 text-warning">{expiringBatchesCount}</div>
+            <small className="text-warning d-block mt-1">Expiry within 90 days</small>
+          </div>
+        </div>
+      </div>
+
+      {/* Inventory Table */}
+      <div className="table-responsive app-card mt-3">
+        <table className="table mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>Vaccine Name</th>
+              <th>Batch Number</th>
+              <th>Available Doses</th>
+              <th>Expiry Date</th>
+              <th>Storage Temperature</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockList.map(item => {
+              const isLowStock = item.doses < LOW_STOCK_THRESHOLD;
+              const expiry = new Date(item.expiryDate);
+              const today = new Date();
+              const diffDays = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+              const isExpiringSoon = diffDays > 0 && diffDays <= 90;
+
+              return (
+                <tr key={item.id}>
+                  <td><strong>{item.name}</strong></td>
+                  <td><code className="text-secondary">{item.batch}</code></td>
+                  <td>{item.doses}</td>
+                  <td>
+                    <span className={isExpiringSoon ? 'text-warning font-weight-medium' : ''}>
+                      {new Date(item.expiryDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                      {isExpiringSoon && <span className="small d-block text-warning" style={{ fontSize: '0.75rem' }}>⚠️ Expiring soon</span>}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="badge bg-light text-dark border">
+                      ❄️ {item.temperature}
+                    </span>
+                  </td>
+                  <td>
+                    {isLowStock ? (
+                      <span className="badge bg-danger text-white rounded-pill px-2.5 py-1" style={{ fontSize: '0.7rem' }}>Low Stock</span>
+                    ) : (
+                      <span className="badge bg-success text-white rounded-pill px-2.5 py-1" style={{ fontSize: '0.7rem' }}>In Stock</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Modal Form */}
+      {showModal && (
+        <div className="custom-modal-backdrop" onClick={() => setShowModal(false)}>
+          <div className="custom-modal-content p-4" onClick={e => e.stopPropagation()}>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h3 className="m-0 h5 font-weight-medium">Update Vaccine Inventory</h3>
+              <button className="btn-close" onClick={() => setShowModal(false)}></button>
+            </div>
+            
+            <form onSubmit={handleUpdateStock}>
+              <div className="mb-3">
+                <label className="form-label font-weight-medium">Vaccine Name</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  placeholder="e.g. OPV (Oral Polio Vaccine)" 
+                  value={form.name} 
+                  onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                  required
+                />
+              </div>
+
+              <div className="row g-2 mb-3">
+                <div className="col-md-6">
+                  <label className="form-label font-weight-medium">Batch Number</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="e.g. BATCH-123" 
+                    value={form.batch} 
+                    onChange={e => setForm(p => ({ ...p, batch: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label font-weight-medium">Quantity Received</label>
+                  <input 
+                    type="number" 
+                    className="form-control" 
+                    placeholder="e.g. 100" 
+                    value={form.quantity} 
+                    onChange={e => setForm(p => ({ ...p, quantity: e.target.value }))}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="row g-2 mb-4">
+                <div className="col-md-6">
+                  <label className="form-label font-weight-medium">Expiry Date</label>
+                  <input 
+                    type="date" 
+                    className="form-control" 
+                    value={form.expiryDate} 
+                    onChange={e => setForm(p => ({ ...p, expiryDate: e.target.value }))}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label font-weight-medium">Storage Temperature</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="e.g. 4.0°C" 
+                    value={form.temperature} 
+                    onChange={e => setForm(p => ({ ...p, temperature: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-end gap-2">
+                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary">Save Inventory</button>
+              </div>
+            </form>
           </div>
         </div>
       )}

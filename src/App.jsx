@@ -23,6 +23,7 @@ import ManageSchedule from './pages/ManageSchedule';
 import DueThisWeek from './pages/DueThisWeek';
 import MissedCases from './pages/MissedCases';
 import Reports from './pages/Reports';
+import VaccineStock from './pages/VaccineStock';
 import NotFound from './pages/NotFound';
 
 const App = () => {
@@ -65,6 +66,7 @@ const App = () => {
             <Route path="/admin/due-this-week" element={<DueThisWeek />} />
             <Route path="/admin/missed-cases" element={<MissedCases />} />
             <Route path="/admin/reports" element={<Reports />} />
+            <Route path="/admin/vaccine-stock" element={<VaccineStock />} />
           </Route>
         </Route>
 
