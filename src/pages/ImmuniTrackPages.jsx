@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 import StatusBadge from '../components/StatusBadge';
 import { useAuth } from '../context/AuthContext';
 import api, { formatDate } from '../services/api';
-import heroImage from '../assets/mamacare-hero.png';
+import heroImage from '../assets/immunitrack-hero.png';
 
 const emptyChild = {
   full_name: '',
@@ -161,7 +161,7 @@ export const Home = () => (
       <div className="container hero-content">
         <div>
           <span className="eyebrow">Uganda routine immunisation support</span>
-          <h1>MamaCare Immunisation Tracker</h1>
+          <h1>ImmuniTrack Immunisation Tracker</h1>
           <p>
             Track every child’s vaccine visits, see what is due next, and keep reminders close for every caregiver and
             health worker.
@@ -198,13 +198,13 @@ export const Home = () => (
 
 export const About = () => (
   <main className="container py-5 narrow-page">
-    <h1>About MamaCare</h1>
+    <h1>About ImmuniTrack</h1>
     <p>
-      MamaCare helps mothers and caregivers keep track of routine immunisation visits for their children. Health workers
+      ImmuniTrack helps mothers and caregivers keep track of routine immunisation visits for their children. Health workers
       can maintain the schedule in the database and review children who are due or have missed vaccines.
     </p>
     <div className="alert alert-warning">
-      MamaCare provides reminders only. It does not replace advice, diagnosis, or care from a qualified health worker.
+      ImmuniTrack provides reminders only. It does not replace advice, diagnosis, or care from a qualified health worker.
     </div>
   </main>
 );
@@ -236,8 +236,8 @@ export const Login = () => {
         <label className="form-label">Password</label>
         <input className="form-control mb-3" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
         <button className="btn btn-primary w-100">Login</button>
-        <p className="small text-muted mt-3 mb-0">Demo admin: admin@mamacare.test / Admin123!</p>
-        <p className="small text-muted mb-0">Demo caregiver: amina@mamacare.test / Care123!</p>
+        <p className="small text-muted mt-3 mb-0">Demo admin: admin@immunitrack.test / Admin123!</p>
+        <p className="small text-muted mb-0">Demo caregiver: amina@immunitrack.test / Care123!</p>
       </form>
     </main>
   );

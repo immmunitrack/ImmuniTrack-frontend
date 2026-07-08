@@ -1,1 +1,1 @@
-export { MyReminders as default } from './MamaCarePages';
+export { MyReminders as default } from './ImmuniTrackPages';

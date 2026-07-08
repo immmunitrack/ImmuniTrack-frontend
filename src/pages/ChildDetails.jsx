@@ -1,1 +1,1 @@
-export { ChildDetails as default } from './MamaCarePages';
+export { ChildDetails as default } from './ImmuniTrackPages';

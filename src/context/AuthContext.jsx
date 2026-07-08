@@ -5,13 +5,13 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem('mamacare_user');
+    const stored = localStorage.getItem('immunitrack_user');
     return stored ? JSON.parse(stored) : null;
   });
-  const [loading, setLoading] = useState(Boolean(localStorage.getItem('mamacare_token')));
+  const [loading, setLoading] = useState(Boolean(localStorage.getItem('immunitrack_token')));
 
   useEffect(() => {
-    const token = localStorage.getItem('mamacare_token');
+    const token = localStorage.getItem('immunitrack_token');
     if (!token) {
       setLoading(false);
       return;
@@ -20,19 +20,19 @@ export const AuthProvider = ({ children }) => {
       .get('/auth/me')
       .then((res) => {
         setUser(res.data.user);
-        localStorage.setItem('mamacare_user', JSON.stringify(res.data.user));
+        localStorage.setItem('immunitrack_user', JSON.stringify(res.data.user));
       })
       .catch(() => {
-        localStorage.removeItem('mamacare_token');
-        localStorage.removeItem('mamacare_user');
+        localStorage.removeItem('immunitrack_token');
+        localStorage.removeItem('immunitrack_user');
         setUser(null);
       })
       .finally(() => setLoading(false));
   }, []);
 
   const storeSession = (data) => {
-    localStorage.setItem('mamacare_token', data.token);
-    localStorage.setItem('mamacare_user', JSON.stringify(data.user));
+    localStorage.setItem('immunitrack_token', data.token);
+    localStorage.setItem('immunitrack_user', JSON.stringify(data.user));
     setUser(data.user);
     return data.user;
   };
@@ -48,8 +48,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('mamacare_token');
-    localStorage.removeItem('mamacare_user');
+    localStorage.removeItem('immunitrack_token');
+    localStorage.removeItem('immunitrack_user');
     setUser(null);
   };
 

@@ -1,1 +1,1 @@
-export { NotFound as default } from './MamaCarePages';
+export { NotFound as default } from './ImmuniTrackPages';

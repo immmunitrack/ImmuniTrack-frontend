@@ -1,8 +1,8 @@
-# MamaCare Frontend
+# ImmuniTrack Frontend
 
-MamaCare Frontend is the React browser app for the MamaCare Immunisation Tracker. It helps caregivers register children, view vaccine timelines, mark received immunisations, and read reminders. Admins and health workers can review missed or upcoming visits, manage schedules, and view simple reports.
+ImmuniTrack Frontend is the React browser app for the ImmuniTrack Immunisation Tracker. It helps caregivers register children, view vaccine timelines, mark received immunisations, and read reminders. Admins and health workers can review missed or upcoming visits, manage schedules, and view simple reports.
 
-This folder is a separate frontend repo. Run it together with the `mamacare-backend` repo.
+This folder is a separate frontend repo. Run it together with the `immunitrack-backend` repo.
 
 ## Technologies
 
@@ -15,7 +15,7 @@ This folder is a separate frontend repo. Run it together with the `mamacare-back
 
 ## Main Features
 
-- Public MamaCare information pages
+- Public ImmuniTrack information pages
 - Login and registration screens
 - Caregiver dashboard with child profiles and immunisation timelines
 - Reminder list for upcoming and missed immunisation visits
@@ -26,7 +26,7 @@ This folder is a separate frontend repo. Run it together with the `mamacare-back
 
 - Node.js 18 or newer
 - npm
-- MamaCare Backend running at `http://localhost:5050/api`
+- ImmuniTrack Backend running at `http://localhost:5050/api`
 
 ## Setup
 
@@ -65,7 +65,7 @@ http://localhost:5173
 Start the backend in a separate terminal:
 
 ```bash
-cd ../mamacare-backend
+cd ../immunitrack-backend
 npm install
 cp .env.example .env
 mysql -u root -p < database/schema.sql
@@ -76,7 +76,7 @@ npm run dev
 Then start this frontend repo:
 
 ```bash
-cd ../mamacare-frontend
+cd ../immunitrack-frontend
 npm install
 cp .env.example .env
 npm run dev
@@ -84,10 +84,10 @@ npm run dev
 
 ## Demo Login Accounts
 
-- Admin or health worker: `admin@mamacare.test` / `Admin123!`
-- Caregiver: `amina@mamacare.test` / `Care123!`
-- Caregiver: `sarah@mamacare.test` / `Care123!`
-- Caregiver: `prossy@mamacare.test` / `Care123!`
+- Admin or health worker: `admin@immunitrack.test` / `Admin123!`
+- Caregiver: `amina@immunitrack.test` / `Care123!`
+- Caregiver: `sarah@immunitrack.test` / `Care123!`
+- Caregiver: `prossy@immunitrack.test` / `Care123!`
 
 ## Project Structure
 
@@ -121,6 +121,6 @@ After login, the app stores the JWT token and sends it in the `Authorization` he
 
 ## Learning Notes
 
-Start with `src/App.jsx` to understand the page routes. Then read `src/pages/MamaCarePages.jsx` for the main screens and `src/context/AuthContext.jsx` for login state. API calls are grouped in `src/services/api.js`.
+Start with `src/App.jsx` to understand the page routes. Then read `src/pages/ImmuniTrackPages.jsx` for the main screens and `src/context/AuthContext.jsx` for login state. API calls are grouped in `src/services/api.js`.
 
-MamaCare is a learning project and reminder tool. It does not replace advice from a qualified health worker.
+ImmuniTrack is a learning project and reminder tool. It does not replace advice from a qualified health worker.

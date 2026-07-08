@@ -1,1 +1,1 @@
-export { Register as default } from './MamaCarePages';
+export { Register as default } from './ImmuniTrackPages';

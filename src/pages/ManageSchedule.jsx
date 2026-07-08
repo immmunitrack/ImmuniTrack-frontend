@@ -1,1 +1,1 @@
-export { ManageSchedule as default } from './MamaCarePages';
+export { ManageSchedule as default } from './ImmuniTrackPages';

@@ -15,7 +15,7 @@ const AppNavbar = () => {
     <nav className="navbar navbar-expand-lg bg-white border-bottom sticky-top">
       <div className="container">
         <Link className="navbar-brand fw-bold text-primary" to="/">
-          MamaCare
+          ImmuniTrack
         </Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
           <span className="navbar-toggler-icon" />
