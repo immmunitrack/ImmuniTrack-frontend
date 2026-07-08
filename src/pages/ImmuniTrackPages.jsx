@@ -5,7 +5,7 @@ import Loading from '../components/Loading';
 import StatusBadge from '../components/StatusBadge';
 import { useAuth } from '../context/AuthContext';
 import api, { formatDate } from '../services/api';
-import heroImage from '../assets/mamacare-hero.png';
+import heroImage from '../assets/immunitrack-hero.png';
 import logoImage from '../assets/immunitracklogo.png';
 
 const emptyChild = {
