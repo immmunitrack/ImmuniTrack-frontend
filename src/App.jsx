@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
 import AppNavbar from './components/AppNavbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './layouts/DashboardLayout';
@@ -24,45 +25,53 @@ import MissedCases from './pages/MissedCases';
 import Reports from './pages/Reports';
 import NotFound from './pages/NotFound';
 
-const App = () => (
-  <>
-    <AppNavbar />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+const App = () => {
+  useEffect(() => {
+    const theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-bs-theme', theme);
+  }, []);
 
-      <Route element={<ProtectedRoute roles={['caregiver']} />}>
-        <Route element={<DashboardLayout />}>
-          <Route path="/caregiver" element={<CaregiverDashboard />} />
-          <Route path="/caregiver/children" element={<MyChildren />} />
-          <Route path="/caregiver/children/new" element={<AddChild />} />
-          <Route path="/caregiver/children/:id" element={<ChildDetails />} />
-          <Route path="/caregiver/children/:id/edit" element={<AddChild mode="edit" />} />
-          <Route path="/caregiver/children/:id/timeline" element={<ImmunisationTimeline />} />
-          <Route path="/caregiver/upcoming" element={<UpcomingImmunisations />} />
-          <Route path="/caregiver/missed" element={<MissedImmunisations />} />
-          <Route path="/caregiver/reminders" element={<MyReminders />} />
-          <Route path="/caregiver/profile" element={<Profile />} />
+  return (
+    <>
+      <AppNavbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route element={<ProtectedRoute roles={['caregiver']} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/caregiver" element={<CaregiverDashboard />} />
+            <Route path="/caregiver/children" element={<MyChildren />} />
+            <Route path="/caregiver/children/new" element={<AddChild />} />
+            <Route path="/caregiver/children/:id" element={<ChildDetails />} />
+            <Route path="/caregiver/children/:id/edit" element={<AddChild mode="edit" />} />
+            <Route path="/caregiver/children/:id/timeline" element={<ImmunisationTimeline />} />
+            <Route path="/caregiver/upcoming" element={<UpcomingImmunisations />} />
+            <Route path="/caregiver/missed" element={<MissedImmunisations />} />
+            <Route path="/caregiver/reminders" element={<MyReminders />} />
+            <Route path="/caregiver/profile" element={<Profile />} />
+          </Route>
         </Route>
-      </Route>
 
-      <Route element={<ProtectedRoute roles={['admin', 'health_worker']} />}>
-        <Route element={<DashboardLayout />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<ManageUsers />} />
-          <Route path="/admin/children" element={<ManageChildren />} />
-          <Route path="/admin/schedule" element={<ManageSchedule />} />
-          <Route path="/admin/due-this-week" element={<DueThisWeek />} />
-          <Route path="/admin/missed-cases" element={<MissedCases />} />
-          <Route path="/admin/reports" element={<Reports />} />
+        <Route element={<ProtectedRoute roles={['admin', 'health_worker']} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<ManageUsers />} />
+            <Route path="/admin/children" element={<ManageChildren />} />
+            <Route path="/admin/schedule" element={<ManageSchedule />} />
+            <Route path="/admin/due-this-week" element={<DueThisWeek />} />
+            <Route path="/admin/missed-cases" element={<MissedCases />} />
+            <Route path="/admin/reports" element={<Reports />} />
+          </Route>
         </Route>
-      </Route>
 
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </>
-);
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
+};
 
 export default App;
