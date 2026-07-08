@@ -5,7 +5,8 @@ import Loading from '../components/Loading';
 import StatusBadge from '../components/StatusBadge';
 import { useAuth } from '../context/AuthContext';
 import api, { formatDate } from '../services/api';
-import heroImage from '../assets/immunitrack-hero.png';
+import heroImage from '../assets/mamacare-hero.png';
+import logoImage from '../assets/immunitracklogo.png';
 
 const emptyChild = {
   full_name: '',
@@ -160,8 +161,8 @@ export const Home = () => (
       <div className="hero-overlay" />
       <div className="container hero-content">
         <div>
-          <span className="eyebrow">Uganda routine immunisation support</span>
-          <h1>ImmuniTrack Immunisation Tracker</h1>
+          <span className="eyebrow">No Child Should miss a vaccine because the system lost track of them.</span>
+          <h1>ImmuniTrack</h1>
           <p>
             Track every child’s vaccine visits, see what is due next, and keep reminders close for every caregiver and
             health worker.
@@ -196,15 +197,65 @@ export const Home = () => (
   </main>
 );
 
+
 export const About = () => (
-  <main className="container py-5 narrow-page">
-    <h1>About ImmuniTrack</h1>
-    <p>
-      ImmuniTrack helps mothers and caregivers keep track of routine immunisation visits for their children. Health workers
-      can maintain the schedule in the database and review children who are due or have missed vaccines.
-    </p>
-    <div className="alert alert-warning">
-      ImmuniTrack provides reminders only. It does not replace advice, diagnosis, or care from a qualified health worker.
+  <main className="container py-5 narrow-page with-side-bg" style={{ minHeight: 'calc(100vh - 57px)', position: 'relative', zIndex: 1 }}>
+    <div className="text-center mb-5">
+      <h1 className="display-4 fw-bold text-primary">About ImmuniTrack</h1>
+      <p className="lead text-muted mx-auto" style={{ maxWidth: '700px' }}>
+        Bridging the gap between caregivers and healthcare workers to ensure every child 
+        receives their life-saving immunisations on time.
+      </p>
+    </div>
+
+    <section className="mb-5">
+      <h2 className="h4 mb-3 fw-semibold">Our Mission</h2>
+      <p className="text-secondary" style={{ lineHeight: '1.7' }}>
+        Protecting a child's health requires timely action, but keeping track of complex 
+        vaccination schedules can be overwhelming. ImmuniTrack is a digital health companion 
+        designed to simplify immunisation tracking, reduce missed clinic visits, and ensure 
+        no child falls behind on their routine health milestones.
+      </p>
+    </section>
+
+    <section className="mb-5">
+      <h2 className="h4 mb-4 fw-semibold">Key Capabilities</h2>
+      <div className="row g-4">
+        <div className="col-md-6">
+          <div className="card h-100 border-0 shadow-sm p-3 bg-light">
+            <div className="card-body">
+              <h3 className="h5 card-title text-dark fw-bold">For Caregivers &amp; Mothers</h3>
+              <p className="card-text text-secondary small">
+                Easily register your children, view personalized vaccine timelines from birth, 
+                track upcoming appointments, and keep a reliable digital history of received immunisations.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card h-100 border-0 shadow-sm p-3 bg-light">
+            <div className="card-body">
+              <h3 className="h5 card-title text-dark fw-bold">For Health Workers &amp; Admins</h3>
+              <p className="card-text text-secondary small">
+                Maintain the central schedule database, review upcoming or missed facility visits at a glance, 
+                manage child profiles efficiently, and access simple data insights to protect community health.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div className="alert alert-warning d-flex align-items-start p-3 mt-4 border-0 shadow-sm" role="alert">
+      <span className="me-2 fs-5" aria-hidden="true">⚠️</span>
+      <div>
+        <strong className="d-block mb-1">Important Health Disclaimer</strong>
+        <span className="small text-dark">
+          ImmuniTrack is an informational platform and reminder tool. It does not replace the professional advice, 
+          clinical diagnosis, or direct medical treatment provided by a qualified health worker or pediatrician. 
+          Always consult your local clinic regarding your child's specific medical needs.
+        </span>
+      </div>
     </div>
   </main>
 );
@@ -236,8 +287,6 @@ export const Login = () => {
         <label className="form-label">Password</label>
         <input className="form-control mb-3" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
         <button className="btn btn-primary w-100">Login</button>
-        <p className="small text-muted mt-3 mb-0">Demo admin: admin@immunitrack.test / Admin123!</p>
-        <p className="small text-muted mb-0">Demo caregiver: amina@immunitrack.test / Care123!</p>
       </form>
     </main>
   );
@@ -306,7 +355,7 @@ export const CaregiverDashboard = () => {
         { label: 'unread reminders', value: reminders.filter((r) => r.status === 'unread').length }
       ]} />
       <div className="row g-3 mt-1">
-        {children.slice(0, 3).map((child) => <div className="col-md-6" key={child.id}><ChildCard child={child} /></div>)}
+        {children.slice(0, 3).map((child) => <div className="col-12" key={child.id}><ChildCard child={child} /></div>)}
       </div>
     </>
   );
@@ -322,7 +371,7 @@ export const MyChildren = () => {
       <PageHeader title="My Children" subtitle="Register children and open their immunisation timelines." action={<Link className="btn btn-primary" to="/caregiver/children/new">Add Child</Link>} />
       <AlertMessage type="danger" message={error} />
       <div className="filter-bar mb-3"><SearchBox value={search} onChange={setSearch} placeholder="Search children" /></div>
-      <div className="row g-3">{filtered.map((child) => <div className="col-md-6" key={child.id}><ChildCard child={child} /></div>)}</div>
+      <div className="row g-3">{filtered.map((child) => <div className="col-12" key={child.id}><ChildCard child={child} /></div>)}</div>
     </>
   );
 };
@@ -482,6 +531,7 @@ export const MyReminders = () => {
 export const Profile = () => {
   const { user } = useAuth();
   const [form, setForm] = useState({ full_name: user.full_name, phone: user.phone, preferred_reminder_method: user.preferred_reminder_method || 'in_app' });
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [message, setMessage] = useState('');
 
   const submit = async (event) => {
@@ -490,15 +540,46 @@ export const Profile = () => {
     setMessage('Profile updated. Refresh to reload your session details.');
   };
 
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-bs-theme', theme);
+  }, [theme]);
+
   return (
     <>
-      <PageHeader title="Profile" subtitle="Manage phone number and reminder preference." />
+      <PageHeader title="Profile" subtitle="Manage phone number, reminder preference, and appearance." />
       <form className="app-card" onSubmit={submit}>
         <AlertMessage type="success" message={message} />
         <label className="form-label">Full name</label><input className="form-control mb-3" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
         <label className="form-label">Phone</label><input className="form-control mb-3" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-        <label className="form-label">Preferred reminder method</label><select className="form-select mb-3" value={form.preferred_reminder_method} onChange={(e) => setForm({ ...form, preferred_reminder_method: e.target.value })}><option value="in_app">In-app</option><option value="sms">SMS later</option><option value="whatsapp">WhatsApp later</option></select>
-        <button className="btn btn-primary">Save Profile</button>
+        
+        <label className="form-label">Preferred reminder method</label>
+        <select className="form-select mb-4" value={form.preferred_reminder_method} onChange={(e) => setForm({ ...form, preferred_reminder_method: e.target.value })}>
+          <option value="in_app">In-app</option>
+          <option value="sms">SMS later</option>
+          <option value="whatsapp">WhatsApp later</option>
+        </select>
+
+        <label className="form-label d-block">App Appearance</label>
+        <div className="btn-group mb-4 w-100 shadow-sm" role="group" aria-label="Theme Mode Selection">
+          <button 
+            type="button" 
+            className={`btn py-2 ${theme === 'light' ? 'btn-primary' : 'btn-outline-primary'}`} 
+            onClick={() => setTheme('light')}
+          >
+            ☀️ Light Mode
+          </button>
+          <button 
+            type="button" 
+            className={`btn py-2 ${theme === 'dark' ? 'btn-primary' : 'btn-outline-primary'}`} 
+            onClick={() => setTheme('dark')}
+          >
+            🌙 Dark Mode
+          </button>
+        </div>
+
+        <button className="btn btn-primary d-block w-100 py-2">Save Profile</button>
       </form>
     </>
   );
@@ -568,6 +649,11 @@ export const ManageSchedule = () => {
     await api.put(`/schedule/${item.id}/status`, { is_active: !item.is_active });
     refresh();
   };
+  const deleteItem = async (item) => {
+    if (!window.confirm(`Are you sure you want to delete ${item.vaccine_name}?`)) return;
+    await api.delete(`/schedule/${item.id}`);
+    refresh();
+  };
 
   if (loading) return <Loading />;
   return (
@@ -583,7 +669,7 @@ export const ManageSchedule = () => {
           <div className="col-12"><textarea className="form-control" rows="2" placeholder="Description" value={form.description || ''} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
         </div>
       </form>
-      <div className="table-responsive app-card"><table className="table mb-0"><thead><tr><th>Vaccine</th><th>Age</th><th>Offset</th><th>Dose</th><th>Required</th><th>Status</th><th /></tr></thead><tbody>{schedule.map((item) => <tr key={item.id}><td>{item.vaccine_name}<div className="small text-muted">{item.description}</div></td><td>{item.recommended_age_label}</td><td>{item.due_offset_days} days</td><td>{item.dose_number}</td><td>{item.is_required ? 'Yes' : 'Optional'}</td><td>{item.is_active ? 'Active' : 'Inactive'}</td><td className="text-end"><button className="btn btn-sm btn-outline-primary me-2" onClick={() => edit(item)}>Edit</button><button className="btn btn-sm btn-outline-secondary" onClick={() => toggle(item)}>{item.is_active ? 'Deactivate' : 'Activate'}</button></td></tr>)}</tbody></table></div>
+      <div className="table-responsive app-card"><table className="table mb-0"><thead><tr><th>Vaccine</th><th>Age</th><th>Offset</th><th>Dose</th><th>Required</th><th>Status</th><th /></tr></thead><tbody>{schedule.map((item) => <tr key={item.id}><td>{item.vaccine_name}<div className="small text-muted">{item.description}</div></td><td>{item.recommended_age_label}</td><td>{item.due_offset_days} days</td><td>{item.dose_number}</td><td>{item.is_required ? 'Yes' : 'Optional'}</td><td>{item.is_active ? 'Active' : 'Inactive'}</td><td className="text-end"><div className="d-flex justify-content-end gap-2 flex-nowrap"><button className="btn btn-sm btn-outline-primary" onClick={() => edit(item)}>Edit</button><button className="btn btn-sm btn-outline-secondary" onClick={() => toggle(item)}>{item.is_active ? 'Deactivate' : 'Activate'}</button><button className="btn btn-sm btn-outline-danger" onClick={() => deleteItem(item)}>Delete</button></div></td></tr>)}</tbody></table></div>
     </>
   );
 };

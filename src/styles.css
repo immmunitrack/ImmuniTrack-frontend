@@ -1,41 +1,69 @@
 :root {
-  --mc-primary: #116a73;
-  --mc-primary-dark: #0a454b;
-  --mc-accent: #f4a261;
-  --mc-ink: #17252a;
-  --mc-muted: #64748b;
-  --mc-surface: #f6faf9;
-  --mc-card: #ffffff;
-  --mc-border: #d8e5e2;
+  --immuni-blue: #0f8df5;
+  --immuni-green: #00c853;
+  --immuni-teal: #00b8a9;
+  --immuni-white: #ffffff;
+  --immuni-orange: #ff9800;
+  --immuni-red: #f00018;
+  --immuni-dark: #0f172a;
+  --immuni-light-blue: #f8fbff;
+}
+
+[data-theme="dark"] {
+  --immuni-light-blue: #0f172a;
+  --immuni-dark: #f8fbff;
+  --immuni-white: #1e293b;
+}
+
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .filter-bar,
+[data-theme="dark"] .app-card {
+  background: var(--immuni-white);
+  border-color: #334155;
+  color: var(--immuni-dark);
+}
+
+[data-theme="dark"] .stat-card span,
+[data-theme="dark"] .detail-grid span,
+[data-theme="dark"] .child-card p {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .glass-panel {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff;
 }
 
 body {
-  background: var(--mc-surface);
-  color: var(--mc-ink);
+  background: var(--immuni-light-blue);
+  color: var(--immuni-dark);
 }
+
 
 a {
   text-decoration: none;
 }
 
 .btn-primary {
-  background: var(--mc-primary);
-  border-color: var(--mc-primary);
+  background: var(--immuni-blue);
+  border-color: var(--immuni-blue);
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: var(--mc-primary-dark);
-  border-color: var(--mc-primary-dark);
+  background: var(--immuni-blue);
+  border-color: var(--immuni-blue);
 }
 
 .text-primary {
-  color: var(--mc-primary) !important;
+  color: var(--immuni-blue) !important;
 }
 
 .navbar-brand {
   letter-spacing: 0;
 }
+
 
 .hero-section {
   min-height: 74vh;
@@ -43,7 +71,7 @@ a {
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: #102f34;
+  background:var(--immuni-light-blue);
 }
 
 .hero-image {
@@ -58,7 +86,12 @@ a {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(10, 45, 50, 0.88) 0%, rgba(10, 45, 50, 0.64) 42%, rgba(10, 45, 50, 0.12) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(15, 141, 245, 0.88),
+    rgba(0, 184, 169, 0.78),
+    rgba(0, 200, 83, 0.65)
+  );
 }
 
 .hero-content {
@@ -99,8 +132,8 @@ a {
 
 .auth-card,
 .app-card {
-  background: var(--mc-card);
-  border: 1px solid var(--mc-border);
+  background: var(--immuni-white);
+  border: 1px solid var(--immuni-blue);
   border-radius: 8px;
   padding: 1.25rem;
   box-shadow: 0 16px 40px rgba(17, 106, 115, 0.08);
@@ -118,6 +151,28 @@ a {
 
 .dashboard-shell {
   min-height: calc(100vh - 57px);
+  position: relative;
+}
+
+.with-side-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: url('./assets/mamacare-hero.jpg') center/cover no-repeat;
+  /* More visible on the left (0.95), slightly faded in the middle for content (0.2), and visible on the right for the menu (0.4) */
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.95) 100%);
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.95) 100%);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
 .dashboard-nav {
@@ -147,9 +202,9 @@ a {
 }
 
 .stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   margin-bottom: 1.25rem;
 }
 
@@ -319,4 +374,35 @@ a {
   .table {
     min-width: 760px;
   }
+}
+
+.navbar-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f8df5;
+}
+
+.brand-subtitle {
+  font-size: 0.7rem;
+  color: #00b894;
+}
+.dashboard-logo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
