@@ -7,6 +7,9 @@ import { useAuth } from '../context/AuthContext';
 import api, { formatDate } from '../services/api';
 import heroImage from '../assets/immunitrack-hero.png';
 import logoImage from '../assets/immunitracklogo.png';
+import heroBgImage from '../assets/vaccination-hero.jpg';
+
+
 
 const emptyChild = {
   full_name: '',
@@ -154,48 +157,157 @@ const ChildCard = ({ child }) => (
   </div>
 );
 
-export const Home = () => (
-  <main>
-    <section className="hero-section">
-      <img src={heroImage} alt="" className="hero-image" />
-      <div className="hero-overlay" />
-      <div className="container hero-content">
-        <div>
-          <span className="eyebrow">No Child Should miss a vaccine because the system lost track of them.</span>
-          <h1>ImmuniTrack</h1>
-          <p>
-            Track every child’s vaccine visits, see what is due next, and keep reminders close for every caregiver and
-            health worker.
-          </p>
-          <div className="d-flex flex-wrap gap-2">
-            <Link className="btn btn-primary btn-lg" to="/register">
-              Register as Caregiver
-            </Link>
-            <Link className="btn btn-light btn-lg" to="/login">
-              Login
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section className="container py-5">
-      <div className="row g-4">
-        {[
-          ['Child timelines', 'DOB-based schedules calculate due dates from editable vaccine offsets.'],
-          ['Reminder list', 'In-app reminders are generated 7 days before, 1 day before, and after missed visits.'],
-          ['Health worker view', 'Admins can review missed cases, due children, schedules, and basic statistics.']
-        ].map(([title, text]) => (
-          <div className="col-md-4" key={title}>
-            <div className="app-card h-100">
-              <h2 className="h5">{title}</h2>
-              <p className="text-muted mb-0">{text}</p>
+export const Home = () => {
+  const [birthdate, setBirthdate] = useState('');
+  
+  // Sample schedule config based on real vaccine offsets
+  const sampleSchedule = [
+    { name: 'BCG (Tuberculosis)', age: 'At Birth', offset: 0 },
+    { name: 'OPV 0 (Polio)', age: 'At Birth', offset: 0 },
+    { name: 'Pentavalent 1', age: '6w', offset: 42 },
+    { name: 'PCV 1 (Pneumococcal)', age: '6w', offset: 42 },
+    { name: 'OPV 1 (Polio)', age: '6w', offset: 42 },
+    { name: 'Pentavalent 2', age: '10w', offset: 70 },
+    { name: 'PCV 2 (Pneumococcal)', age: '10w', offset: 70 },
+    { name: 'Measles-Rubella 1', age: '9m', offset: 270 }
+  ];
+
+  const estimatedDates = useMemo(() => {
+    if (!birthdate) return [];
+    const baseDate = new Date(birthdate);
+    return sampleSchedule.map(v => {
+      const dueDate = new Date(baseDate);
+      dueDate.setDate(baseDate.getDate() + v.offset);
+      return {
+        ...v,
+        formattedDate: dueDate.toLocaleDateString(undefined, { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+        })
+      };
+    });
+  }, [birthdate]);
+
+  return (
+    <main 
+      className="warm-landing"
+      style={{ 
+        backgroundImage: `linear-gradient(180deg, rgba(0, 95, 96, 0.45) 0%, rgba(12, 21, 36, 0.75) 100%), url(${heroBgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <section className="hero-warm-container">
+        <div className="warm-hero-grid">
+          <div className="hero-text-content">
+            <span className="eyebrow-warm">✨ Your Child's Health Guard</span>
+            <h1 className="hero-title-warm">
+              Keeping Every Child's Health <span>On Track</span>
+            </h1>
+            <p className="hero-desc-warm">
+              ImmuniTrack ensures no child misses vital immunisations. Track vaccine schedules, calculate precise due dates, and receive timely SMS/email reminders. Built for caregivers and healthcare workers.
+            </p>
+            <div className="d-flex flex-wrap gap-3">
+              <Link className="btn-warm-primary" to="/register">
+                Register as Caregiver
+              </Link>
+              <Link className="btn-warm-secondary" to="/login">
+                Access Dashboard
+              </Link>
+            </div>
+            
+            {/* Interactive Widget inside Hero block */}
+            <div className="estimator-container">
+              <div className="estimator-box">
+                <h3 className="h6 fw-bold mb-3 text-dark">Quick Vaccine Due Date Estimator</h3>
+                <div className="row g-2 align-items-center">
+                  <div className="col-sm-5">
+                    <label className="form-label mb-1 text-secondary" style={{ fontSize: '0.82rem' }}>Enter Baby's Date of Birth</label>
+                    <input 
+                      type="date" 
+                      className="form-control" 
+                      value={birthdate} 
+                      onChange={e => setBirthdate(e.target.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      style={{ borderRadius: '10px', fontSize: '0.9rem' }}
+                    />
+                  </div>
+                  <div className="col-sm-7">
+                    {!birthdate ? (
+                      <div className="text-muted p-2" style={{ fontSize: '0.85rem', borderLeft: '3px solid var(--warm-accent)' }}>
+                        Select a birthdate to calculate key vaccine due dates instantly.
+                      </div>
+                    ) : (
+                      <div className="text-secondary" style={{ fontSize: '0.85rem' }}>
+                        Calculated schedule preview:
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {birthdate && (
+                  <div className="estimator-results">
+                    {estimatedDates.slice(0, 3).map((item, idx) => (
+                      <div className="estimator-result-card" key={idx}>
+                        <div className="estimator-badge">
+                          {item.age === 'At Birth' ? '🐣' : item.age}
+                        </div>
+                        <div className="estimator-info">
+                          <span className="estimator-vaccine-name" style={{ fontSize: '0.85rem' }}>{item.name}</span>
+                          <span className="estimator-vaccine-due">Due: <strong>{item.formattedDate}</strong></span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        ))}
-      </div>
-    </section>
-  </main>
-);
+        </div>
+      </section>
+
+      {/* Feature section */}
+      <section className="feature-section-warm">
+        <div className="container">
+          <div className="feature-header-warm">
+            <h2>Why Choose ImmuniTrack?</h2>
+            <p className="text-muted">Designed to simplify immunisation management for both families and clinical workers.</p>
+          </div>
+          <div className="row g-4">
+            {[
+              {
+                icon: '🗓️',
+                title: 'Personalized Timelines',
+                desc: 'Get exact due dates automatically calculated based on your child\'s date of birth and country-specific vaccine offsets.'
+              },
+              {
+                icon: '🔔',
+                title: 'Smart Reminders',
+                desc: 'Receive alerts 7 days before, 1 day before, and immediately after a missed visit to ensure you never miss a milestone.'
+              },
+              {
+                icon: '📊',
+                title: 'Healthcare Dashboard',
+                desc: 'Health workers can track community coverage, follow up on missed cases, review vaccine inventory levels, and export reports.'
+              }
+            ].map((f, i) => (
+              <div className="col-md-4" key={i}>
+                <div className="feature-card-warm">
+                  <div className="feature-icon-warm">{f.icon}</div>
+                  <h3 className="feature-title-warm">{f.title}</h3>
+                  <p className="feature-desc-warm">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+};
 
 
 export const About = () => (

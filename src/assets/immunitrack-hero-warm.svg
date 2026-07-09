@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 550" width="100%" height="100%" fill="none">
+  <!-- Color Gradients & Filters -->
+  <defs>
+    <!-- Background Soft Glow -->
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#fff0e6" stop-opacity="1" />
+      <stop offset="60%" stop-color="#fff9f5" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Warm Peach-Orange Gradient -->
+    <linearGradient id="warmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9f43" />
+      <stop offset="100%" stop-color="#ff5252" />
+    </linearGradient>
+
+    <!-- Teal/Cyan Protection Gradient -->
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00b8a9" />
+      <stop offset="100%" stop-color="#005f60" />
+    </linearGradient>
+
+    <!-- Gold/Amber Accent Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe259" />
+      <stop offset="100%" stop-color="#ffa751" />
+    </linearGradient>
+
+    <!-- Soft Glassmorphic Card Background -->
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.4" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#ff9f43" flood-opacity="0.12" />
+    </filter>
+    <filter id="shadowTeal" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#00b8a9" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- BACKGROUND: Soft Warm Glow -->
+  <circle cx="300" cy="275" r="260" fill="url(#glowGrad)" />
+
+  <!-- DECORATIVE ELEMENTS: Floating protective rings -->
+  <circle cx="300" cy="275" r="210" stroke="url(#tealGrad)" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.35" />
+  <circle cx="300" cy="275" r="180" stroke="url(#warmGrad)" stroke-width="1" opacity="0.25" />
+
+  <!-- DYNAMIC SHAPES (Representing safety & health) -->
+  <!-- Protective Shield Grid Concept -->
+  <path d="M 120 180 Q 90 240 100 300 Q 110 360 160 410" stroke="#00b8a9" stroke-width="2" stroke-linecap="round" opacity="0.2" />
+  <path d="M 480 180 Q 510 240 500 300 Q 490 360 440 410" stroke="#ff9f43" stroke-width="2" stroke-linecap="round" opacity="0.2" />
+
+  <!-- Floating Sparkles (SVG Micro-details) -->
+  <!-- Top Right Sparkle -->
+  <path d="M 440 110 L 443 118 L 451 121 L 443 124 L 440 132 L 437 124 L 429 121 L 437 118 Z" fill="url(#goldGrad)" />
+  <!-- Left Middle Sparkle -->
+  <path d="M 110 240 L 112 245 L 117 247 L 112 249 L 110 254 L 108 249 L 103 247 L 108 245 Z" fill="url(#warmGrad)" />
+  <!-- Top Left Heart -->
+  <path d="M 160 120 C 155 110, 140 110, 135 120 C 130 130, 145 145, 160 155 C 175 145, 190 130, 185 120 C 180 110, 165 110, 160 120 Z" fill="#ff5252" opacity="0.15" transform="rotate(-15, 160, 120)" />
+
+  <!-- MAIN CHARACTER ILLUSTRATION: Mother & Baby Silhouette Graphic -->
+  <g filter="url(#shadow)">
+    <!-- Mother Outer Body Outline (Stylized Flowing Dress) -->
+    <path d="M 230 460 C 210 380, 220 280, 270 240 C 310 210, 340 180, 350 150 C 352 140, 355 130, 355 120 C 355 80, 310 80, 310 120 C 310 140, 290 170, 270 190 C 230 230, 180 290, 180 370 C 180 430, 210 460, 230 460 Z" fill="url(#tealGrad)" />
+
+    <!-- Mother's Hair (Stylized Crown/Bun) -->
+    <path d="M 310 110 C 300 110, 285 90, 300 70 C 315 50, 345 55, 355 75 C 365 95, 345 110, 330 110 Z" fill="#0c1d24" />
+
+    <!-- Mother's Face Profile (Facing down at baby) -->
+    <path d="M 310 120 C 310 128, 305 135, 298 140 C 293 144, 290 148, 292 152 C 294 156, 298 156, 302 153 C 310 148, 316 142, 320 135 C 322 130, 320 120, 310 120 Z" fill="#fbc5a4" opacity="0.9" />
+
+    <!-- Mother's Arm Cradle Shape (Comforting, curving around baby) -->
+    <path d="M 220 360 C 220 360, 250 310, 290 310 C 330 310, 360 340, 360 380 C 360 400, 340 430, 300 430 C 270 430, 240 410, 230 380" fill="none" stroke="url(#tealGrad)" stroke-width="18" stroke-linecap="round" />
+    <path d="M 220 360 C 220 360, 250 310, 290 310 C 330 310, 360 340, 360 380 C 360 400, 340 430, 300 430 C 270 430, 240 410, 230 380" fill="none" stroke="#fff9f5" stroke-width="12" stroke-linecap="round" opacity="0.95" />
+
+    <!-- Baby Figure (Snuggled against Mother's Chest) -->
+    <!-- Baby body swaddled in warm blanket -->
+    <path d="M 260 370 C 250 330, 290 280, 320 280 C 340 280, 350 310, 340 350 C 330 380, 290 410, 260 370 Z" fill="url(#warmGrad)" />
+    <!-- Baby blanket fold details -->
+    <path d="M 285 320 Q 310 325 330 310" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <path d="M 270 350 Q 300 355 325 335" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+
+    <!-- Baby's Head -->
+    <circle cx="285" cy="290" r="22" fill="#fbc5a4" />
+    <!-- Baby's soft hair -->
+    <path d="M 270 280 C 270 270, 285 268, 295 275 C 300 279, 300 285, 290 285" fill="#5c4033" />
+    <!-- Baby's peaceful closed eye -->
+    <path d="M 282 292 Q 285 295 288 292" stroke="#5c4033" stroke-width="2" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- INTERACTIVE OVERLAY GRAPHIC: A floating "Protected" Badge -->
+  <g transform="translate(390, 330)" filter="url(#shadowTeal)">
+    <!-- Glass background card -->
+    <rect width="140" height="70" rx="16" fill="url(#glassGrad)" stroke="#ffffff" stroke-width="1.5" />
+    
+    <!-- Shield Icon (Green/Teal) -->
+    <g transform="translate(15, 18)">
+      <path d="M 12 2 C 12 2, 20 5, 20 10 C 20 16, 12 21, 12 21 C 12 21, 4 16, 4 10 C 4 5, 12 2, 12 2 Z" fill="#00c853" />
+      <path d="M 9 11 L 11 13 L 15 9" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    </g>
+
+    <!-- Badge Text -->
+    <text x="50" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="700" fill="#005f60">Protected</text>
+    <text x="50" y="48" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10" font-weight="500" fill="#717182">On Schedule</text>
+  </g>
+
+  <!-- FLOATING CARD 2: "Reminders Active" -->
+  <g transform="translate(70, 390)" filter="url(#shadow)">
+    <!-- Glass background card -->
+    <rect width="160" height="60" rx="14" fill="url(#glassGrad)" stroke="#ffffff" stroke-width="1.5" />
+    
+    <!-- Bell Icon (Gold) -->
+    <g transform="translate(15, 18)">
+      <path d="M10 2a3 3 0 00-3 3v3.5C7 9.3 6.3 10 5.5 10A1.5 1.5 0 007 11.5h6a1.5 1.5 0 001.5-1.5c-.8 0-1.5-.7-1.5-1.5V5a3 3 0 00-3-3z" fill="#ffa751" />
+      <path d="M8 13.5a2 2 0 004 0H8z" fill="#ffa751" />
+    </g>
+
+    <!-- Badge Text -->
+    <text x="45" y="27" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="700" fill="#ff5252">Next Due: BCG</text>
+    <text x="45" y="42" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10" font-weight="500" fill="#717182">SMS Sent 2h ago</text>
+  </g>
+</svg>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
   --immuni-blue: #0f8df5;
   --immuni-green: #00c853;
@@ -7,7 +9,19 @@
   --immuni-red: #f00018;
   --immuni-dark: #0f172a;
   --immuni-light-blue: #f8fbff;
+  
+  /* Redesign Warm Color Tokens */
+  --warm-bg-soft: #fff9f5;
+  --warm-accent: #ff7a45;
+  --warm-primary: #005f60;
+  --warm-teal: #00b8a9;
+  --warm-cream: #fffaf0;
 }
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+}
+
 
 [data-theme="dark"] {
   --immuni-light-blue: #0f172a;
@@ -580,6 +594,322 @@ a {
     content: "" !important;
   }
 }
+
+/* Custom Redesign: Warm & Welcoming Landing Page Styles */
+.warm-landing {
+  background: linear-gradient(135deg, var(--warm-bg-soft) 0%, #ffffff 50%, var(--immuni-light-blue) 100%);
+  min-height: calc(100vh - 57px);
+}
+
+.hero-warm-container {
+  width: 100%;
+  padding: 6rem 1.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.warm-hero-grid {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-text-content {
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.eyebrow-warm {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+  color: #ffd8a8;
+  margin-bottom: 1rem;
+  display: inline-block;
+  background: rgba(255, 122, 69, 0.15);
+  padding: 0.35rem 0.8rem;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 122, 69, 0.25);
+}
+
+.hero-title-warm {
+  font-size: clamp(2.5rem, 4.5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-title-warm span {
+  background: linear-gradient(135deg, var(--warm-accent), #0f8df5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc-warm {
+  font-size: 1.18rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-bottom: 2.2rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.hero-image-wrapper {
+  position: relative;
+  animation: fadeIn 1s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.hero-svg-img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  filter: drop-shadow(0 20px 40px rgba(0, 95, 96, 0.08));
+}
+
+/* Interactive Vaccine Schedule Estimator */
+.estimator-container {
+  margin-top: 2rem;
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  opacity: 0;
+}
+
+.estimator-box {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 95, 96, 0.12);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 16px 40px rgba(0, 95, 96, 0.04);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  position: relative;
+}
+
+.estimator-box::before {
+  content: "✨ Try Calculator";
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  background: linear-gradient(135deg, var(--warm-accent), #ff9f43);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.8rem;
+  border-radius: 99px;
+  box-shadow: 0 4px 10px rgba(255, 122, 69, 0.3);
+}
+
+.estimator-results {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.estimator-result-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 95, 96, 0.08);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.estimator-result-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--warm-accent);
+  box-shadow: 0 8px 20px rgba(255, 122, 69, 0.08);
+}
+
+.estimator-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(0, 184, 169, 0.1);
+  color: var(--warm-primary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.estimator-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.estimator-vaccine-name {
+  font-weight: 700;
+  color: var(--immuni-dark);
+  font-size: 0.92rem;
+}
+
+.estimator-vaccine-due {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+
+/* Feature Cards Redesign */
+.feature-section-warm {
+  background: rgba(12, 21, 36, 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  padding: 5rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-header-warm {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3.5rem;
+}
+
+.feature-header-warm h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.feature-header-warm p {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.feature-card-warm {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 2.2rem 1.8rem;
+  height: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card-warm::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  transition: background-color 0.25s ease;
+}
+
+.feature-card-warm:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 95, 96, 0.08);
+}
+
+.feature-card-warm:hover::before {
+  background: var(--warm-accent);
+}
+
+.feature-icon-warm {
+  font-size: 2rem;
+  margin-bottom: 1.25rem;
+  display: inline-block;
+  background: rgba(255, 122, 69, 0.08);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.feature-title-warm {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--warm-primary);
+  margin-bottom: 0.85rem;
+}
+
+.feature-desc-warm {
+  font-size: 0.95rem;
+  color: var(--muted-foreground);
+  line-height: 1.55;
+}
+
+/* Call to Action Buttons Redesign */
+.btn-warm-primary {
+  background: linear-gradient(135deg, var(--warm-accent) 0%, #ff5252 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  padding: 0.85rem 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(255, 122, 69, 0.25);
+  transition: all 0.25s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-warm-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(255, 122, 69, 0.35);
+  color: #ffffff;
+}
+
+.btn-warm-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  padding: 0.85rem 1.8rem;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-warm-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 991px) {
+  .warm-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .hero-image-wrapper {
+    order: -1;
+  }
+}
+
 
 
 
