@@ -46,14 +46,19 @@ const App = () => {
           <Route element={<DashboardLayout />}>
             <Route path="/caregiver" element={<CaregiverDashboard />} />
             <Route path="/caregiver/children" element={<MyChildren />} />
-            <Route path="/caregiver/children/new" element={<AddChild />} />
-            <Route path="/caregiver/children/:id" element={<ChildDetails />} />
-            <Route path="/caregiver/children/:id/edit" element={<AddChild mode="edit" />} />
-            <Route path="/caregiver/children/:id/timeline" element={<ImmunisationTimeline />} />
             <Route path="/caregiver/upcoming" element={<UpcomingImmunisations />} />
             <Route path="/caregiver/missed" element={<MissedImmunisations />} />
             <Route path="/caregiver/reminders" element={<MyReminders />} />
             <Route path="/caregiver/profile" element={<Profile />} />
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute roles={['caregiver', 'health_worker', 'admin']} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/caregiver/children/new" element={<AddChild />} />
+            <Route path="/caregiver/children/:id" element={<ChildDetails />} />
+            <Route path="/caregiver/children/:id/edit" element={<AddChild mode="edit" />} />
+            <Route path="/caregiver/children/:id/timeline" element={<ImmunisationTimeline />} />
           </Route>
         </Route>
 

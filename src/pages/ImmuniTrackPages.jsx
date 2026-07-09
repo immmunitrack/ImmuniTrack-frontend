@@ -98,7 +98,15 @@ const EventTable = ({ events, onComplete, onMissed }) => (
       <tbody>
         {events.map((event) => (
           <tr key={event.id}>
-            <td>{event.child_name || 'Child'}</td>
+            <td>
+              {event.child_id ? (
+                <Link to={`/caregiver/children/${event.child_id}`} className="fw-semibold text-primary">
+                  {event.child_name || 'Child'}
+                </Link>
+              ) : (
+                event.child_name || 'Child'
+              )}
+            </td>
             <td>
               <strong>{event.vaccine_name}</strong>
               {event.notes && <div className="small text-muted">{event.notes}</div>}
@@ -407,15 +415,22 @@ export const Login = () => {
 export const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ full_name: '', phone: '', email: '', password: '', preferred_reminder_method: 'in_app' });
+  const [form, setForm] = useState({ 
+    full_name: '', 
+    phone: '', 
+    email: '', 
+    password: '', 
+    preferred_reminder_method: 'in_app',
+    role: 'caregiver'
+  });
   const [error, setError] = useState('');
 
   const submit = async (event) => {
     event.preventDefault();
     setError('');
     try {
-      await register(form);
-      navigate('/caregiver');
+      const user = await register(form);
+      navigate(user?.role === 'caregiver' ? '/caregiver' : '/admin');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
     }
@@ -424,8 +439,21 @@ export const Register = () => {
   return (
     <main className="auth-page">
       <form className="auth-card" onSubmit={submit}>
-        <h1>Create Caregiver Account</h1>
+        <h1>Create {form.role === 'health_worker' ? 'Health Worker' : 'Parent'} Account</h1>
         <AlertMessage type="danger" message={error} />
+        
+        <div className="mb-3">
+          <label className="form-label">Register As</label>
+          <select 
+            className="form-select" 
+            value={form.role} 
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+          >
+            <option value="caregiver">Parent / Caregiver</option>
+            <option value="health_worker">Health Worker</option>
+          </select>
+        </div>
+
         {['full_name', 'phone', 'email', 'password'].map((field) => (
           <div className="mb-3" key={field}>
             <label className="form-label text-capitalize">{field.replace('_', ' ')}</label>
@@ -438,12 +466,16 @@ export const Register = () => {
             />
           </div>
         ))}
-        <label className="form-label">Preferred reminder method</label>
-        <select className="form-select mb-3" value={form.preferred_reminder_method} onChange={(e) => setForm({ ...form, preferred_reminder_method: e.target.value })}>
-          <option value="in_app">In-app</option>
-          <option value="sms">SMS later</option>
-          <option value="whatsapp">WhatsApp later</option>
-        </select>
+        
+        <div className="mb-3">
+          <label className="form-label">Preferred reminder method</label>
+          <select className="form-select" value={form.preferred_reminder_method} onChange={(e) => setForm({ ...form, preferred_reminder_method: e.target.value })}>
+            <option value="in_app">In-app</option>
+            <option value="sms">SMS later</option>
+            <option value="whatsapp">WhatsApp later</option>
+          </select>
+        </div>
+        
         <button className="btn btn-primary w-100">Register</button>
       </form>
     </main>
@@ -545,6 +577,7 @@ const ChildForm = ({ mode }) => {
 export const AddChild = ({ mode }) => <ChildForm mode={mode} />;
 
 export const ChildDetails = () => {
+  const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const [child, setChild] = useState(null);
@@ -815,7 +848,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
                                 <span className={`badge rounded-pill px-2 py-1 small font-weight-medium ${statusColorClass}`} style={{ fontSize: '0.7rem' }}>
                                   {badgeLabel}
                                 </span>
-                                {record.status !== 'completed' && (
+                                {user?.role !== 'caregiver' && record.status !== 'completed' && (
                                   <div className="d-flex gap-1 mt-1">
                                     <button 
                                       className="btn btn-sm btn-outline-success p-1 rounded" 
@@ -958,6 +991,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
 };
 
 export const ImmunisationTimeline = () => {
+  const { user } = useAuth();
   const { id } = useParams();
   const { data: events, loading, refresh } = useApi(`/immunisations/child/${id}`, 'immunisations');
   const [error, setError] = useState('');
@@ -983,7 +1017,7 @@ export const ImmunisationTimeline = () => {
     <>
       <PageHeader title="Immunisation Timeline" subtitle="Expected visits are generated from the editable schedule and the child date of birth." />
       <AlertMessage type="danger" message={error} />
-      <EventTable events={events} onComplete={complete} onMissed={missed} />
+      <EventTable events={events} onComplete={user?.role === 'caregiver' ? null : complete} onMissed={user?.role === 'caregiver' ? null : missed} />
     </>
   );
 };
@@ -1192,7 +1226,7 @@ export const ManageChildren = () => {
   return (
     <>
       <PageHeader title="Registered Children" subtitle="All child profiles visible to health workers." />
-      <div className="table-responsive app-card"><table className="table mb-0"><thead><tr><th>Child</th><th>Caregiver</th><th>DOB</th><th>District</th><th>Facility</th></tr></thead><tbody>{children.map((child) => <tr key={child.id}><td>{child.full_name}</td><td>{child.caregiver_name}<div className="small text-muted">{child.caregiver_phone}</div></td><td>{formatDate(child.date_of_birth)}</td><td>{child.district}</td><td>{child.health_facility_name || 'Not selected'}</td></tr>)}</tbody></table></div>
+      <div className="table-responsive app-card"><table className="table mb-0"><thead><tr><th>Child</th><th>Caregiver</th><th>DOB</th><th>District</th><th>Facility</th></tr></thead><tbody>{children.map((child) => <tr key={child.id}><td><Link to={`/caregiver/children/${child.id}`} className="fw-semibold text-primary">{child.full_name}</Link></td><td>{child.caregiver_name}<div className="small text-muted">{child.caregiver_phone}</div></td><td>{formatDate(child.date_of_birth)}</td><td>{child.district}</td><td>{child.health_facility_name || 'Not selected'}</td></tr>)}</tbody></table></div>
     </>
   );
 };
