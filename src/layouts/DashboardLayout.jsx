@@ -47,7 +47,7 @@ const DashboardLayout = () => {
       <div className="container-fluid pt-3 pb-4 px-4 position-relative z-1">
         <div className="row g-4">
           {/* Navigation Sidebar */}
-          <aside className="col-lg-3 col-xl-2 order-1 order-lg-3">
+          <aside className="col-lg-3 col-xl-2">
             <div 
               className="dashboard-nav position-relative" 
               ref={menuRef} 
@@ -105,13 +105,9 @@ const DashboardLayout = () => {
           </aside>
 
           {/* Main Dashboard Content */}
-          {/* We restrict the content width so the right background image is visible. On mobile, it takes full width */}
-          <section className="col-lg-6 col-md-12 d-flex flex-column gap-3 order-2 order-lg-2">
+          <section className="col-lg-9 col-xl-10 col-md-12 d-flex flex-column gap-3">
             <Outlet />
           </section>
-
-          {/* Empty column to let the background image shine through on larger screens */}
-          <aside className="col-lg-3 col-xl-4 d-none d-lg-block order-3 order-lg-1"></aside>
         </div>
       </div>
     </main>

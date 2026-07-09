@@ -167,7 +167,7 @@ const ChildCard = ({ child }) => (
 
 export const Home = () => {
   const [birthdate, setBirthdate] = useState('');
-  
+
   // Sample schedule config based on real vaccine offsets
   const sampleSchedule = [
     { name: 'BCG (Tuberculosis)', age: 'At Birth', offset: 0 },
@@ -188,19 +188,19 @@ export const Home = () => {
       dueDate.setDate(baseDate.getDate() + v.offset);
       return {
         ...v,
-        formattedDate: dueDate.toLocaleDateString(undefined, { 
-          month: 'short', 
-          day: 'numeric', 
-          year: 'numeric' 
+        formattedDate: dueDate.toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
         })
       };
     });
   }, [birthdate]);
 
   return (
-    <main 
+    <main
       className="warm-landing"
-      style={{ 
+      style={{
         backgroundImage: `linear-gradient(180deg, rgba(0, 95, 96, 0.45) 0%, rgba(12, 21, 36, 0.75) 100%), url(${heroBgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -226,7 +226,7 @@ export const Home = () => {
                 Access Dashboard
               </Link>
             </div>
-            
+
             {/* Interactive Widget inside Hero block */}
             <div className="estimator-container">
               <div className="estimator-box">
@@ -234,10 +234,10 @@ export const Home = () => {
                 <div className="row g-2 align-items-center">
                   <div className="col-sm-5">
                     <label className="form-label mb-1 text-secondary" style={{ fontSize: '0.82rem' }}>Enter Baby's Date of Birth</label>
-                    <input 
-                      type="date" 
-                      className="form-control" 
-                      value={birthdate} 
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={birthdate}
                       onChange={e => setBirthdate(e.target.value)}
                       max={new Date().toISOString().split('T')[0]}
                       style={{ borderRadius: '10px', fontSize: '0.9rem' }}
@@ -319,11 +319,11 @@ export const Home = () => {
 
 
 export const About = () => (
-  <main className="container py-5 narrow-page with-side-bg" style={{ minHeight: 'calc(100vh - 57px)', position: 'relative', zIndex: 1 }}>
+  <main className="container py-5 with-side-bg" style={{ minHeight: 'calc(100vh - 57px)', position: 'relative', zIndex: 1 }}>
     <div className="text-center mb-5">
       <h1 className="display-4 fw-bold text-primary">About ImmuniTrack</h1>
       <p className="lead text-muted mx-auto" style={{ maxWidth: '700px' }}>
-        Bridging the gap between caregivers and healthcare workers to ensure every child 
+        Bridging the gap between caregivers and healthcare workers to ensure every child
         receives their life-saving immunisations on time.
       </p>
     </div>
@@ -331,9 +331,9 @@ export const About = () => (
     <section className="mb-5">
       <h2 className="h4 mb-3 fw-semibold">Our Mission</h2>
       <p className="text-secondary" style={{ lineHeight: '1.7' }}>
-        Protecting a child's health requires timely action, but keeping track of complex 
-        vaccination schedules can be overwhelming. ImmuniTrack is a digital health companion 
-        designed to simplify immunisation tracking, reduce missed clinic visits, and ensure 
+        Protecting a child's health requires timely action, but keeping track of complex
+        vaccination schedules can be overwhelming. ImmuniTrack is a digital health companion
+        designed to simplify immunisation tracking, reduce missed clinic visits, and ensure
         no child falls behind on their routine health milestones.
       </p>
     </section>
@@ -346,7 +346,7 @@ export const About = () => (
             <div className="card-body">
               <h3 className="h5 card-title text-dark fw-bold">For Caregivers &amp; Mothers</h3>
               <p className="card-text text-secondary small">
-                Easily register your children, view personalized vaccine timelines from birth, 
+                Easily register your children, view personalized vaccine timelines from birth,
                 track upcoming appointments, and keep a reliable digital history of received immunisations.
               </p>
             </div>
@@ -357,7 +357,7 @@ export const About = () => (
             <div className="card-body">
               <h3 className="h5 card-title text-dark fw-bold">For Health Workers &amp; Admins</h3>
               <p className="card-text text-secondary small">
-                Maintain the central schedule database, review upcoming or missed facility visits at a glance, 
+                Maintain the central schedule database, review upcoming or missed facility visits at a glance,
                 manage child profiles efficiently, and access simple data insights to protect community health.
               </p>
             </div>
@@ -371,8 +371,8 @@ export const About = () => (
       <div>
         <strong className="d-block mb-1">Important Health Disclaimer</strong>
         <span className="small text-dark">
-          ImmuniTrack is an informational platform and reminder tool. It does not replace the professional advice, 
-          clinical diagnosis, or direct medical treatment provided by a qualified health worker or pediatrician. 
+          ImmuniTrack is an informational platform and reminder tool. It does not replace the professional advice,
+          clinical diagnosis, or direct medical treatment provided by a qualified health worker or pediatrician.
           Always consult your local clinic regarding your child's specific medical needs.
         </span>
       </div>
@@ -381,33 +381,85 @@ export const About = () => (
 );
 
 export const Login = () => {
-  const { login } = useAuth();
+  const { login, login2FA } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
+  const [twoFactorRequired, setTwoFactorRequired] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [twoFactorCode, setTwoFactorCode] = useState('');
   const [error, setError] = useState('');
 
   const submit = async (event) => {
     event.preventDefault();
     setError('');
     try {
-      const user = await login(form.email, form.password);
-      navigate(user.role === 'caregiver' ? '/caregiver' : '/admin');
+      const res = await login(form.email, form.password);
+      if (res && res.two_factor_required) {
+        setTwoFactorRequired(true);
+        setUserId(res.userId);
+      } else {
+        navigate(res.role === 'caregiver' ? '/caregiver' : '/admin');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }
   };
 
+  const submit2FA = async (event) => {
+    event.preventDefault();
+    setError('');
+    try {
+      const user = await login2FA(userId, twoFactorCode);
+      navigate(user.role === 'caregiver' ? '/caregiver' : '/admin');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid 2FA code');
+    }
+  };
+
   return (
     <main className="auth-page">
-      <form className="auth-card" onSubmit={submit}>
-        <h1>Login</h1>
-        <AlertMessage type="danger" message={error} />
-        <label className="form-label">Email</label>
-        <input className="form-control mb-3" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-        <label className="form-label">Password</label>
-        <input className="form-control mb-3" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
-        <button className="btn btn-primary w-100">Login</button>
-      </form>
+      {twoFactorRequired ? (
+        <form className="auth-card" onSubmit={submit2FA}>
+          <h1>Two-Factor Verification</h1>
+          <p className="text-secondary small mb-4">
+            Enter the 6-digit verification code from your authenticator app to secure your session.
+          </p>
+          <AlertMessage type="danger" message={error} />
+          <label className="form-label">Verification Code</label>
+          <input 
+            className="form-control mb-3 text-center fw-bold" 
+            type="text" 
+            placeholder="e.g. 123456" 
+            maxLength={6} 
+            value={twoFactorCode} 
+            onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, ''))} 
+            required 
+            style={{ fontSize: '1.25rem', letterSpacing: '4px' }}
+          />
+          <button className="btn btn-primary w-100 mb-3">Verify &amp; Login</button>
+          <button 
+            type="button" 
+            className="btn btn-outline-secondary w-100" 
+            onClick={() => {
+              setTwoFactorRequired(false);
+              setTwoFactorCode('');
+              setError('');
+            }}
+          >
+            Back to Login
+          </button>
+        </form>
+      ) : (
+        <form className="auth-card" onSubmit={submit}>
+          <h1>Login</h1>
+          <AlertMessage type="danger" message={error} />
+          <label className="form-label">Email</label>
+          <input className="form-control mb-3" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+          <label className="form-label">Password</label>
+          <input className="form-control mb-3" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+          <button className="btn btn-primary w-100">Login</button>
+        </form>
+      )}
     </main>
   );
 };
@@ -415,11 +467,11 @@ export const Login = () => {
 export const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ 
-    full_name: '', 
-    phone: '', 
-    email: '', 
-    password: '', 
+  const [form, setForm] = useState({
+    full_name: '',
+    phone: '',
+    email: '',
+    password: '',
     preferred_reminder_method: 'in_app',
     role: 'caregiver'
   });
@@ -441,12 +493,12 @@ export const Register = () => {
       <form className="auth-card" onSubmit={submit}>
         <h1>Create {form.role === 'health_worker' ? 'Health Worker' : 'Parent'} Account</h1>
         <AlertMessage type="danger" message={error} />
-        
+
         <div className="mb-3">
           <label className="form-label">Register As</label>
-          <select 
-            className="form-select" 
-            value={form.role} 
+          <select
+            className="form-select"
+            value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
           >
             <option value="caregiver">Parent / Caregiver</option>
@@ -466,7 +518,7 @@ export const Register = () => {
             />
           </div>
         ))}
-        
+
         <div className="mb-3">
           <label className="form-label">Preferred reminder method</label>
           <select className="form-select" value={form.preferred_reminder_method} onChange={(e) => setForm({ ...form, preferred_reminder_method: e.target.value })}>
@@ -475,7 +527,7 @@ export const Register = () => {
             <option value="whatsapp">WhatsApp later</option>
           </select>
         </div>
-        
+
         <button className="btn btn-primary w-100">Register</button>
       </form>
     </main>
@@ -665,7 +717,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
     const missed = records.filter(r => r.status === 'missed').length;
     const upcoming = records.filter(r => r.status === 'upcoming' || r.status === 'pending').length;
     const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
-    
+
     const nextVaccine = records
       .filter(r => r.status === 'upcoming' || r.status === 'pending')
       .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))[0];
@@ -678,7 +730,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
     <>
       <PageHeader title={child?.full_name || 'Child Details'} action={<Link className="btn btn-primary" to={`/caregiver/children/${id}/timeline`}>Open Timeline</Link>} />
       <AlertMessage type="danger" message={error} />
-      
+
       {child && (
         <div className="app-card detail-grid">
           <div><span>Date of birth</span><strong>{formatDate(child.date_of_birth)}</strong></div>
@@ -747,7 +799,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
               <div className="p-4 text-white" style={{ background: 'linear-gradient(135deg, #005f60 0%, #00b8a9 100%)' }}>
                 <h4 className="m-0 h5 font-weight-medium text-white">Immunisation Progress</h4>
                 <small style={{ opacity: 0.8 }}>Compliance and tracking metrics</small>
-                
+
                 <div className="d-flex align-items-center gap-3 mt-4">
                   <div className="position-relative d-flex align-items-center justify-content-center" style={{ width: '80px', height: '80px' }}>
                     <svg width="80" height="80" viewBox="0 0 36 36">
@@ -838,8 +890,8 @@ Thank you for using ImmuniTrack to protect your child's health.`;
                               <div>
                                 <h6 className="m-0 font-weight-medium text-dark dark:text-light" style={{ fontSize: '0.9rem' }}>{record.vaccine_name}</h6>
                                 <p className="m-0 mt-1 small text-muted" style={{ fontSize: '0.78rem' }}>
-                                  {record.status === 'completed' 
-                                    ? `Given: ${formatDate(record.date_received)}` 
+                                  {record.status === 'completed'
+                                    ? `Given: ${formatDate(record.date_received)}`
                                     : `Due: ${formatDate(record.due_date)}`
                                   }
                                 </p>
@@ -850,8 +902,8 @@ Thank you for using ImmuniTrack to protect your child's health.`;
                                 </span>
                                 {user?.role !== 'caregiver' && record.status !== 'completed' && (
                                   <div className="d-flex gap-1 mt-1">
-                                    <button 
-                                      className="btn btn-sm btn-outline-success p-1 rounded" 
+                                    <button
+                                      className="btn btn-sm btn-outline-success p-1 rounded"
                                       title="Mark Completed"
                                       onClick={() => handleMarkComplete(record)}
                                       style={{ width: '24px', height: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}
@@ -859,8 +911,8 @@ Thank you for using ImmuniTrack to protect your child's health.`;
                                       ✓
                                     </button>
                                     {record.status !== 'missed' && (
-                                      <button 
-                                        className="btn btn-sm btn-outline-danger p-1 rounded" 
+                                      <button
+                                        className="btn btn-sm btn-outline-danger p-1 rounded"
                                         title="Mark Missed"
                                         onClick={() => handleMarkMissed(record)}
                                         style={{ width: '24px', height: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}
@@ -892,7 +944,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
               <h3 className="m-0 h5 font-weight-medium text-dark">Digital Immunisation Card</h3>
               <button className="btn-close" onClick={() => setActiveModal(null)} aria-label="Close"></button>
             </div>
-            
+
             <div className="digital-medical-card">
               <div className="d-flex justify-content-between align-items-start mb-4">
                 <div>
@@ -900,7 +952,7 @@ Thank you for using ImmuniTrack to protect your child's health.`;
                   <small style={{ opacity: 0.8, fontSize: '0.75rem' }}>E-Health ID Card</small>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 24 24" className="text-white">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
                 </svg>
               </div>
 
@@ -947,9 +999,9 @@ Thank you for using ImmuniTrack to protect your child's health.`;
               <h3 className="m-0 h5 font-weight-medium text-dark">Verifiable QR Code</h3>
               <button className="btn-close" onClick={() => setActiveModal(null)} aria-label="Close"></button>
             </div>
-            
+
             <p className="small text-muted mb-3">Present this code at any participating clinic or border checkpoint to securely access and verify vaccine records.</p>
-            
+
             <div className="d-inline-flex p-3 bg-white border border-light rounded-4 shadow-sm">
               <svg width="180" height="180" viewBox="0 0 29 29" fill="none" className="text-dark">
                 <path d="M1 1h7v7H1V1zm1 1v5h5V2H2zm1 1h3v3H3V3z" fill="currentColor" fillRule="evenodd" />
@@ -1063,15 +1115,29 @@ export const MyReminders = () => {
 };
 
 export const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [form, setForm] = useState({ full_name: user.full_name, phone: user.phone, preferred_reminder_method: user.preferred_reminder_method || 'in_app' });
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [message, setMessage] = useState('');
 
+  // 2FA local states
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [secret, setSecret] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [tfaMessage, setTfaMessage] = useState('');
+  const [tfaError, setTfaError] = useState('');
+  const [setupStep, setSetupStep] = useState(false);
+
   const submit = async (event) => {
     event.preventDefault();
-    await api.put('/users/me', form);
-    setMessage('Profile updated. Refresh to reload your session details.');
+    try {
+      await api.put('/users/me', form);
+      updateUser({ ...user, ...form });
+      setMessage('Profile updated successfully.');
+    } catch (err) {
+      setMessage('');
+      setTfaError(err.response?.data?.message || 'Failed to update profile.');
+    }
   };
 
   useEffect(() => {
@@ -1080,6 +1146,46 @@ export const Profile = () => {
     document.documentElement.setAttribute('data-bs-theme', theme);
   }, [theme]);
 
+  const handleInitiate2FA = async () => {
+    setTfaMessage('');
+    setTfaError('');
+    try {
+      const res = await api.post('/auth/2fa/setup');
+      setSecret(res.data.secret);
+      setQrCodeUrl(res.data.qrCodeUrl);
+      setSetupStep(true);
+    } catch (err) {
+      setTfaError(err.response?.data?.message || 'Could not initiate 2FA setup.');
+    }
+  };
+
+  const handleConfirm2FA = async () => {
+    setTfaMessage('');
+    setTfaError('');
+    try {
+      await api.post('/auth/2fa/verify', { code: verificationCode });
+      updateUser({ ...user, two_factor_enabled: true });
+      setSetupStep(false);
+      setVerificationCode('');
+      setTfaMessage('Two-factor authentication has been enabled successfully.');
+    } catch (err) {
+      setTfaError(err.response?.data?.message || 'Invalid verification code. Please try again.');
+    }
+  };
+
+  const handleDisable2FA = async () => {
+    if (!window.confirm('Are you sure you want to disable two-factor authentication?')) return;
+    setTfaMessage('');
+    setTfaError('');
+    try {
+      await api.post('/auth/2fa/disable');
+      updateUser({ ...user, two_factor_enabled: false });
+      setTfaMessage('Two-factor authentication has been disabled.');
+    } catch (err) {
+      setTfaError(err.response?.data?.message || 'Could not disable 2FA.');
+    }
+  };
+
   return (
     <>
       <PageHeader title="Profile" subtitle="Manage phone number, reminder preference, and appearance." />
@@ -1087,7 +1193,7 @@ export const Profile = () => {
         <AlertMessage type="success" message={message} />
         <label className="form-label">Full name</label><input className="form-control mb-3" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
         <label className="form-label">Phone</label><input className="form-control mb-3" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-        
+
         <label className="form-label">Preferred reminder method</label>
         <select className="form-select mb-4" value={form.preferred_reminder_method} onChange={(e) => setForm({ ...form, preferred_reminder_method: e.target.value })}>
           <option value="in_app">In-app</option>
@@ -1097,16 +1203,16 @@ export const Profile = () => {
 
         <label className="form-label d-block">App Appearance</label>
         <div className="btn-group mb-4 w-100 shadow-sm" role="group" aria-label="Theme Mode Selection">
-          <button 
-            type="button" 
-            className={`btn py-2 ${theme === 'light' ? 'btn-primary' : 'btn-outline-primary'}`} 
+          <button
+            type="button"
+            className={`btn py-2 ${theme === 'light' ? 'btn-primary' : 'btn-outline-primary'}`}
             onClick={() => setTheme('light')}
           >
             ☀️ Light Mode
           </button>
-          <button 
-            type="button" 
-            className={`btn py-2 ${theme === 'dark' ? 'btn-primary' : 'btn-outline-primary'}`} 
+          <button
+            type="button"
+            className={`btn py-2 ${theme === 'dark' ? 'btn-primary' : 'btn-outline-primary'}`}
             onClick={() => setTheme('dark')}
           >
             🌙 Dark Mode
@@ -1115,6 +1221,74 @@ export const Profile = () => {
 
         <button className="btn btn-primary d-block w-100 py-2">Save Profile</button>
       </form>
+
+      <div className="app-card mt-4">
+        <h3>Two-Factor Authentication (2FA)</h3>
+        <p className="text-secondary small mb-3">
+          Add an extra layer of security to your account by requiring a verification code from Google Authenticator or another TOTP app.
+        </p>
+
+        <AlertMessage type="success" message={tfaMessage} />
+        <AlertMessage type="danger" message={tfaError} />
+
+        {user?.two_factor_enabled ? (
+          <div>
+            <div className="alert alert-success d-flex align-items-center gap-2 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 14.933a.614.614 0 0 0 .612-.029c1.077-.615 2.115-1.285 3.125-2.02 1.01-.735 1.944-1.54 2.785-2.414.84-.874 1.545-1.808 2.093-2.775C17.163 6.728 17.5 5.672 17.5 4.5V2.62a.615.615 0 0 0-.256-.497l-4.5-3.375a.614.614 0 0 0-.736 0l-4.5 3.375a.615.615 0 0 0-.256.497V4.5c0 1.172.337 2.228.847 3.224.51.996 1.215 1.93 2.056 2.805.84.874 1.775 1.679 2.785 2.414 1.01.735 2.048 1.405 3.125 2.02a.614.614 0 0 0 .612.029zM7.5.5V1h1V.5h-1zM5 8v1h1V8H5zm5 0v1h1V8h-1zm-2.5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+              </svg>
+              Two-factor authentication is currently active.
+            </div>
+            <button className="btn btn-outline-danger w-100 py-2" onClick={handleDisable2FA}>
+              Disable Two-Factor Authentication
+            </button>
+          </div>
+        ) : setupStep ? (
+          <div className="border rounded p-3 bg-light text-dark">
+            <h4 className="h6 fw-bold mb-3">Set Up Authenticator App</h4>
+            <ol className="small text-secondary mb-3 ps-3">
+              <li className="mb-2">Scan the QR code below or enter the key manually into your authenticator app (e.g. Google Authenticator):</li>
+              <code className="d-block my-2 text-dark font-monospace bg-white p-2 border rounded text-center" style={{ letterSpacing: '1px', wordBreak: 'break-all' }}>
+                {secret}
+              </code>
+              <div className="text-center my-3">
+                {qrCodeUrl && <img src={qrCodeUrl} alt="2FA QR Code" className="img-thumbnail bg-white" style={{ maxWidth: '200px' }} />}
+              </div>
+              <li className="mb-2">Enter the 6-digit verification code generated by your authenticator app:</li>
+            </ol>
+            <input
+              type="text"
+              className="form-control mb-3 text-center fw-bold"
+              placeholder="e.g. 123456"
+              maxLength={6}
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
+              style={{ fontSize: '1.25rem', letterSpacing: '4px', maxWidth: '240px', margin: '0 auto' }}
+            />
+            <div className="d-flex gap-2 justify-content-center">
+              <button className="btn btn-primary btn-sm px-4" onClick={handleConfirm2FA}>
+                Verify &amp; Enable
+              </button>
+              <button className="btn btn-outline-secondary btn-sm px-4" onClick={() => setSetupStep(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="alert alert-warning mb-3 small d-flex align-items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              </svg>
+              Secure your account with 2FA to prevent unauthorized access.
+            </div>
+            <button className="btn btn-outline-primary w-100 py-2" onClick={handleInitiate2FA}>
+              Enable Two-Factor Authentication
+            </button>
+          </div>
+        )}
+      </div>
     </>
   );
 };
@@ -1167,7 +1341,7 @@ export const AdminDashboard = () => {
         <div className="col-lg-6">
           <div className="card border-0 shadow-sm rounded-4 p-4 h-100" style={{ background: 'var(--immuni-white, #ffffff)' }}>
             <h4 className="h5 font-weight-medium text-dark mb-3">Weekly Operational Indicators</h4>
-            
+
             <div className="d-flex flex-column gap-3">
               <div>
                 <div className="d-flex justify-content-between align-items-center mb-1">
@@ -1289,7 +1463,7 @@ export const Reports = () => {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false);
-  
+
   // Data for the generated reports
   const [childData, setChildData] = useState(null);
   const [childRecords, setChildRecords] = useState([]);
@@ -1317,7 +1491,7 @@ export const Reports = () => {
     e.preventDefault();
     setLoading(true);
     setIsGenerated(false);
-    
+
     try {
       if (reportType === 'passport') {
         if (!selectedChildId) {
@@ -1330,7 +1504,7 @@ export const Reports = () => {
 
         const immRes = await api.get(`/immunisations/child/${selectedChildId}`);
         let records = immRes.data.immunisations || [];
-        
+
         // Filter by dates if provided
         if (startDate) {
           records = records.filter(r => {
@@ -1365,7 +1539,7 @@ export const Reports = () => {
   return (
     <>
       <PageHeader title="Report Generator" subtitle="Generate printable, verifiable health reports and immunization passports." />
-      
+
       {/* Filters Form */}
       <form className="app-card mb-4" onSubmit={handleGenerate}>
         <div className="row g-3 align-items-end">
@@ -1376,7 +1550,7 @@ export const Reports = () => {
               <option value="coverage">Clinic Coverage Report</option>
             </select>
           </div>
-          
+
           {reportType === 'passport' && (
             <div className="col-md-3">
               <label className="form-label font-weight-medium">Select Child</label>
@@ -1511,9 +1685,8 @@ export const Reports = () => {
                           <td>{r.recommended_age_label}</td>
                           <td>{formatDate(r.due_date)}</td>
                           <td>
-                            <span className={`badge rounded-pill px-2 py-1 font-weight-medium ${
-                              r.status === 'completed' ? 'bg-success text-white' : r.status === 'missed' ? 'bg-danger text-white' : 'bg-warning text-dark'
-                            }`} style={{ fontSize: '0.75rem' }}>
+                            <span className={`badge rounded-pill px-2 py-1 font-weight-medium ${r.status === 'completed' ? 'bg-success text-white' : r.status === 'missed' ? 'bg-danger text-white' : 'bg-warning text-dark'
+                              }`} style={{ fontSize: '0.75rem' }}>
                               {r.status}
                             </span>
                           </td>
@@ -1620,7 +1793,7 @@ export const VaccineStock = () => {
 
   // Compute metrics
   const totalDoses = stockList.reduce((sum, item) => sum + Number(item.doses), 0);
-  
+
   const LOW_STOCK_THRESHOLD = 50;
   const lowStockCount = stockList.filter(item => item.doses < LOW_STOCK_THRESHOLD).length;
 
@@ -1664,7 +1837,7 @@ export const VaccineStock = () => {
             name: form.name,
             batch: form.batch,
             doses: qty,
-            expiryDate: form.expiryDate || new Date(Date.now() + 365*24*60*60*1000).toISOString().split('T')[0],
+            expiryDate: form.expiryDate || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             temperature: form.temperature || '4.0°C'
           }
         ];
@@ -1677,9 +1850,9 @@ export const VaccineStock = () => {
 
   return (
     <>
-      <PageHeader 
-        title="Vaccine Inventory & Stock" 
-        subtitle="Real-time cold-chain status monitoring and dose levels tracking." 
+      <PageHeader
+        title="Vaccine Inventory & Stock"
+        subtitle="Real-time cold-chain status monitoring and dose levels tracking."
         action={
           <button className="btn btn-primary" onClick={() => setShowModal(true)}>
             Update Stock
@@ -1771,15 +1944,15 @@ export const VaccineStock = () => {
               <h3 className="m-0 h5 font-weight-medium">Update Vaccine Inventory</h3>
               <button className="btn-close" onClick={() => setShowModal(false)}></button>
             </div>
-            
+
             <form onSubmit={handleUpdateStock}>
               <div className="mb-3">
                 <label className="form-label font-weight-medium">Vaccine Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="e.g. OPV (Oral Polio Vaccine)" 
-                  value={form.name} 
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. OPV (Oral Polio Vaccine)"
+                  value={form.name}
                   onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                   required
                 />
@@ -1788,22 +1961,22 @@ export const VaccineStock = () => {
               <div className="row g-2 mb-3">
                 <div className="col-md-6">
                   <label className="form-label font-weight-medium">Batch Number</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="e.g. BATCH-123" 
-                    value={form.batch} 
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. BATCH-123"
+                    value={form.batch}
                     onChange={e => setForm(p => ({ ...p, batch: e.target.value }))}
                     required
                   />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label font-weight-medium">Quantity Received</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
-                    placeholder="e.g. 100" 
-                    value={form.quantity} 
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="e.g. 100"
+                    value={form.quantity}
                     onChange={e => setForm(p => ({ ...p, quantity: e.target.value }))}
                     required
                   />
@@ -1813,20 +1986,20 @@ export const VaccineStock = () => {
               <div className="row g-2 mb-4">
                 <div className="col-md-6">
                   <label className="form-label font-weight-medium">Expiry Date</label>
-                  <input 
-                    type="date" 
-                    className="form-control" 
-                    value={form.expiryDate} 
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={form.expiryDate}
                     onChange={e => setForm(p => ({ ...p, expiryDate: e.target.value }))}
                   />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label font-weight-medium">Storage Temperature</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="e.g. 4.0°C" 
-                    value={form.temperature} 
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. 4.0°C"
+                    value={form.temperature}
                     onChange={e => setForm(p => ({ ...p, temperature: e.target.value }))}
                   />
                 </div>
@@ -1845,7 +2018,7 @@ export const VaccineStock = () => {
 };
 
 export const NotFound = () => (
-  <main className="container py-5 narrow-page">
+  <main className="container py-5">
     <h1>Page not found</h1>
     <p>The page you requested is not available.</p>
     <Link className="btn btn-primary" to="/">Go home</Link>

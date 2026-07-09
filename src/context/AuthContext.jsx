@@ -39,12 +39,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password });
+    if (res.data.two_factor_required) {
+      return res.data;
+    }
+    return storeSession(res.data);
+  };
+
+  const login2FA = async (userId, code) => {
+    const res = await api.post('/auth/login/2fa', { userId, code });
     return storeSession(res.data);
   };
 
   const register = async (payload) => {
     const res = await api.post('/auth/register', payload);
     return storeSession(res.data);
+  };
+
+  const updateUser = (updatedUser) => {
+    localStorage.setItem('immunitrack_user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
   };
 
   const logout = () => {
@@ -54,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = useMemo(
-    () => ({ user, loading, login, register, logout, isAuthenticated: Boolean(user) }),
+    () => ({ user, loading, login, login2FA, register, updateUser, logout, isAuthenticated: Boolean(user) }),
     [user, loading]
   );
 
