@@ -910,6 +910,226 @@ a {
   }
 }
 
+/* Premium Split-screen Auth Layout */
+.auth-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: calc(100vh - 57px);
+  background: var(--warm-bg-soft);
+}
+
+@media (min-width: 992px) {
+  .auth-wrapper {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+.auth-sidebar {
+  display: none;
+  background: linear-gradient(135deg, var(--warm-primary) 0%, var(--immuni-dark) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 4.5rem;
+  color: #ffffff;
+}
+
+@media (min-width: 992px) {
+  .auth-sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.auth-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('./assets/vaccination-hero.jpg') center/cover no-repeat;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+.auth-sidebar-content {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.auth-sidebar-footer {
+  position: relative;
+  z-index: 2;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.auth-sidebar-features {
+  margin-top: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.auth-sidebar-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.auth-sidebar-feature-icon {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.auth-sidebar-feature-text h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #ffffff;
+}
+
+.auth-sidebar-feature-text p {
+  font-size: 0.88rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75) !important;
+  line-height: 1.4;
+}
+
+.auth-form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  background: var(--warm-bg-soft);
+}
+
+/* Beautiful Auth Card styling updates */
+.auth-premium-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--immuni-white);
+  border: 1px solid rgba(0, 95, 96, 0.08);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 25px 60px rgba(0, 95, 96, 0.06);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .auth-premium-card {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+}
+
+.auth-premium-card h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--warm-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+[data-theme="dark"] .auth-premium-card h2 {
+  color: #fff;
+}
+
+.auth-premium-card p.subtitle {
+  color: var(--mc-muted);
+  font-size: 0.92rem;
+  margin-bottom: 2rem;
+}
+
+.auth-premium-card .form-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--immuni-dark);
+  margin-bottom: 0.5rem;
+}
+
+[data-theme="dark"] .auth-premium-card .form-label {
+  color: #cbd5e1;
+}
+
+.auth-premium-card .form-control,
+.auth-premium-card .form-select {
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(0, 95, 96, 0.15);
+  background-color: var(--immuni-white);
+  color: var(--immuni-dark);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .auth-premium-card .form-control,
+[data-theme="dark"] .auth-premium-card .form-select {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #fff;
+}
+
+.auth-premium-card .form-control:focus,
+.auth-premium-card .form-select:focus {
+  border-color: var(--warm-accent);
+  box-shadow: 0 0 0 4px rgba(255, 122, 69, 0.15);
+  outline: none;
+}
+
+.auth-premium-card .btn-primary {
+  background: linear-gradient(135deg, var(--warm-accent) 0%, #ff5c24 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.auth-premium-card .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 122, 69, 0.3);
+}
+
+.auth-premium-card .btn-outline-secondary {
+  border-radius: 10px;
+  padding: 0.8rem;
+}
+
+.auth-logo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.auth-logo-header img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.auth-logo-header span {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--warm-primary);
+  letter-spacing: -0.5px;
+}
+
+[data-theme="dark"] .auth-logo-header span {
+  color: #fff;
+}
+
 
 
 
